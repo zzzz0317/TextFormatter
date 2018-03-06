@@ -7,49 +7,14 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
-use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
-
-abstract class AbstractConvertor
+class StringFunctions extends AbstractConvertor
 {
 	/**
-	* @var XPathConvertor
+	* {@inheritdoc}
 	*/
-	protected $convertor;
-
-	/**
-	* Constructor
-	*/
-	public function __construct(XPathConvertor $convertor)
+	public function getRegexps()
 	{
-		$this->convertor = $convertor;
-	}
-
-	/**
-	* 
-	*
-	* @return array[]
-	*/
-	abstract public function getRegexps();
-
-	/**
-	* 
-	*
-	* @param  string $expr
-	* @return string
-	*/
-	protected function convertCondition($expr)
-	{
-		$this->convertor->convertCondition($expr);
-	}
-
-	/**
-	* 
-	*
-	* @param  string $expr
-	* @return string
-	*/
-	protected function convertXPath($expr)
-	{
-		$this->convertor->convertXPath($expr);
+		return [
+		];
 	}
 }
