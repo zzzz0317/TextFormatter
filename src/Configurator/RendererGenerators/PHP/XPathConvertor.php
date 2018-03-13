@@ -208,11 +208,7 @@ class XPathConvertor
 			$expr = '.';
 		}
 
-		$php = $this->convertXPath($expr);
-
-		return ($this->useMultibyteStringFunctions)
-			? 'mb_strlen(' . $php . ",'utf-8')"
-			: "strlen(preg_replace('(.)us','.'," . $php . '))';
+		return "preg_match_all('(.)su'," . $this->convertXPath($expr) . ')';
 	}
 
 	protected function contains($haystack, $needle)
