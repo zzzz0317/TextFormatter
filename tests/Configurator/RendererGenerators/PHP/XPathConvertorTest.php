@@ -194,11 +194,11 @@ class XPathConvertorTest extends Test
 		return [
 			[
 				'string-length(@bar)',
-				"strlen(preg_replace('(.)us','.',\$node->getAttribute('bar')))"
+				"preg_match_all('(.)su',\$node->getAttribute('bar'))"
 			],
 			[
 				'string-length()',
-				"strlen(preg_replace('(.)us','.',\$node->textContent))"
+				"preg_match_all('(.)su',\$node->textContent)"
 			],
 			[
 				'translate(@bar,"abc","ABC")',
@@ -306,14 +306,6 @@ class XPathConvertorTest extends Test
 			[
 				'substring(.,2)',
 				"mb_substr(\$node->textContent,1,null,'utf-8')"
-			],
-			[
-				'string-length()',
-				"mb_strlen(\$node->textContent,'utf-8')"
-			],
-			[
-				'string-length(@bar)',
-				"mb_strlen(\$node->getAttribute('bar'),'utf-8')"
 			],
 		];
 	}
