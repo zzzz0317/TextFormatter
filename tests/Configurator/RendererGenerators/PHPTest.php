@@ -819,9 +819,9 @@ class PHPTest extends Test
 						'<xsl:value-of select="substring(@x,2,2)"/>',
 						'<xsl:value-of select="substring(@x,2,10)"/>',
 						'<xsl:value-of select="substring(@x,10,10)"/>',
-						'<xsl:value-of select="substring(@x,-1,2)"/>',
+						'<xsl:value-of select="substring(@x,-1,3)"/>',
 						'<xsl:value-of select="substring(@x,-10)"/>',
-						'<xsl:value-of select="substring(@x,-10, 2)"/>',
+						'<xsl:value-of select="substring(@x,-10,2)"/>',
 						'<xsl:value-of select="substring(@x,0,-2)"/>',
 						'<xsl:value-of select="substring(@x,0,-10)"/>'
 					]);
