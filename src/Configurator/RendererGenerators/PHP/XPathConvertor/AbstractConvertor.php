@@ -27,7 +27,7 @@ abstract class AbstractConvertor
 	/**
 	* 
 	*
-	* @return array[]
+	* @return array
 	*/
 	abstract public function getRegexps();
 
