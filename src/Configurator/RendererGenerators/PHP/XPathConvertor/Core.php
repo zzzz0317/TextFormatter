@@ -17,9 +17,9 @@ class Core extends AbstractConvertor
 		return [
 			'Attribute' => '@ (?<0>[-\\w]+)',
 			'Dot'       => '\\.',
-			'Name'      => 'name\\(\\)',
-			'LocalName' => 'local-name\\(\\)',
-			'Param'     => '\\$ (?<0>\\w+)',
+			'Name'      => 'name \\(\\)',
+			'LocalName' => 'local-name \\(\\)',
+			'Param'     => '\\$(?<0>\\w+)',
 			'String'    => '"[^"]*"|\'[^\']*\'',
 			'Number'    => '-? \\d++'
 		];
@@ -31,7 +31,7 @@ class Core extends AbstractConvertor
 	* @param  string $attrName
 	* @return string
 	*/
-	protected function convertAttribute($attrName)
+	public function convertAttribute($attrName)
 	{
 		return '$node->getAttribute(' . var_export($attrName, true) . ')';
 	}
@@ -41,7 +41,7 @@ class Core extends AbstractConvertor
 	*
 	* @return string
 	*/
-	protected function convertDot()
+	public function convertDot()
 	{
 		return '$node->textContent';
 	}
@@ -52,7 +52,7 @@ class Core extends AbstractConvertor
 	* @param  string $paramName
 	* @return string
 	*/
-	protected function convertParam($paramName)
+	public function convertParam($paramName)
 	{
 		return '$this->params[' . var_export($paramName, true) . ']';
 	}
@@ -63,7 +63,7 @@ class Core extends AbstractConvertor
 	* @param  string $string Literal string, including the quotes
 	* @return string
 	*/
-	protected function convertString($string)
+	public function convertString($string)
 	{
 		return var_export(substr($string, 1, -1), true);
 	}
@@ -74,7 +74,7 @@ class Core extends AbstractConvertor
 	* @param  string $attrName
 	* @return string
 	*/
-	protected function convertLocalName()
+	public function convertLocalName()
 	{
 		return '$node->localName';
 	}
@@ -85,7 +85,7 @@ class Core extends AbstractConvertor
 	* @param  string $attrName
 	* @return string
 	*/
-	protected function convertName()
+	public function convertName()
 	{
 		return '$node->nodeName';
 	}
@@ -96,7 +96,7 @@ class Core extends AbstractConvertor
 	* @param  string $number
 	* @return string
 	*/
-	protected function convertNumber($number)
+	public function convertNumber($number)
 	{
 		return "'" . $number . "'";
 	}

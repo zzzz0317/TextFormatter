@@ -15,11 +15,7 @@ class Math extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'math' => implode(' ', [
-				'(?<0>(?&attr)|(?&number)|(?&param)|(?&parens))',
-				'(?<1>[-+*]|div)',
-				'(?<2>(?&math)|(?&math0)|(?&parens))'
-			])
+			'Math' => '((?&Attribute)|(?&Number)|(?&Param)|(?&Parens)) ([-+*]|div) ((?-3)|(?-2))'
 		];
 	}
 }
