@@ -18,4 +18,30 @@ class Math extends AbstractConvertor
 			'Math' => '((?&Attribute)|(?&Number)|(?&Param)|(?&Parens)) ([-+*]|div) ((?-4)|(?-3))'
 		];
 	}
+
+	/**
+	* Convert an arithmetic operation
+	*
+	* @param  string $expr1
+	* @param  string $operator
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertMath($expr1, $operator, $expr2)
+	{
+		if (!is_numeric($expr1))
+		{
+			$expr1 = $this->convertXPath($expr1);
+		}
+		if (!is_numeric($expr2))
+		{
+			$expr2 = $this->convertXPath($expr2);
+		}
+		if ($operator === 'div')
+		{
+			$operator = '/';
+		}
+
+		return $expr1 . $operator . $expr2;
+	}
 }

@@ -24,4 +24,39 @@ class StringFunctions extends AbstractConvertor
 			'Translate'       => 'translate \\( ((?&value)) , ((?&string)) , ((?&string)) \\)'
 		];
 	}
+
+	public function convertStringLength($expr)
+	{
+		if ($expr === '')
+		{
+			$expr = '.';
+		}
+
+		return "preg_match_all('(.)su'," . $this->convertXPath($expr) . ')';
+	}
+
+	public function convertContains($haystack, $needle)
+	{
+		return '(strpos(' . $this->convertXPath($haystack) . ',' . $this->convertXPath($needle) . ')!==false)';
+	}
+
+	public function convertNotContains($haystack, $needle)
+	{
+		return '(strpos(' . $this->convertXPath($haystack) . ',' . $this->convertXPath($needle) . ')===false)';
+	}
+
+	public function convertStartsWith($string, $substring)
+	{
+		return '(strpos(' . $this->convertXPath($string) . ',' . $this->convertXPath($substring) . ')===0)';
+	}
+
+	public function convertSubstringAfter($expr, $str)
+	{
+		return 'substr(strstr(' . $this->convertXPath($expr) . ',' . $this->convertXPath($str) . '),' . (strlen($str) - 2) . ')';
+	}
+
+	public function convertSubstringBefore($expr1, $expr2)
+	{
+		return 'strstr(' . $this->convertXPath($expr1) . ',' . $this->convertXPath($expr2) . ',true)';
+	}
 }

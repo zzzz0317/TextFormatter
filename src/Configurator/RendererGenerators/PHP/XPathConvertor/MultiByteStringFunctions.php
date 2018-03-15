@@ -15,7 +15,52 @@ class MultiByteStringFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Substring' => 'substring \\( ((?&value)) , ((?&value)) (?:, ((?&value)))? \\)'
+			'Substring' => 'substring \\( ((?&Value)) , ((?&Value)) (?:, ((?&Value)))? \\)'
 		];
 	}
+
+	/**
+	* Convert a substring() function call
+	*
+	* @param  string         $exprString
+	* @param  string         $exprPos
+	* @param  integer|string $exprLen
+	* @return string
+	*/
+	public function convertSubstring($exprString, $exprPos, $exprLen = PHP_INT_MAX)
+	{
+		// NOTE: negative values for the second argument do not produce the same result as
+		//       specified in XPath if the argument is not a literal number
+		$php = 'mb_substr(' . $this->convertXPath($exprString) . ',';
+
+		// Hardcode the value if possible
+		if (is_numeric($exprPos))
+		{
+			$php .= max(0, $exprPos - 1);
+		}
+		else
+		{
+			$php .= 'max(0,' . $this->convertXPath($exprPos) . '-1)';
+		}
+		$php .= ',';
+
+		if (is_numeric($exprLen))
+		{
+			$len = $exprLen;
+			if (is_numeric($exprPos) && $exprPos < 1)
+			{
+				// Handle substring(0,2) as per XPath 1.0
+				$len += $exprPos - 1;
+			}
+			$php .= max(0, $len);
+		}
+		else
+		{
+			$php .= 'max(0,' . $this->convertXPath($exprLen) . ')';
+		}
+		$php .= ",'utf-8')";
+
+		return $php;
+	}
+
 }

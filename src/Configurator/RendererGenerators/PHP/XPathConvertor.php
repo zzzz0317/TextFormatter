@@ -247,26 +247,6 @@ class XPathConvertor
 		return $php;
 	}
 
-	protected function math($expr1, $operator, $expr2)
-	{
-		if (!is_numeric($expr1))
-		{
-			$expr1 = $this->convertXPath($expr1);
-		}
-
-		if (!is_numeric($expr2))
-		{
-			$expr2 = $this->convertXPath($expr2);
-		}
-
-		if ($operator === 'div')
-		{
-			$operator = '/';
-		}
-
-		return $expr1 . $operator . $expr2;
-	}
-
 	/**
 	* Export an XPath expression as PHP with special consideration for XPath variables
 	*
