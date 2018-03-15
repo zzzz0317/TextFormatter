@@ -209,44 +209,6 @@ class XPathConvertor
 		return '(' . $this->convertXPath($expr) . ')';
 	}
 
-	protected function translate($str, $from, $to)
-	{
-		preg_match_all('(.)su', substr($from, 1, -1), $matches);
-		$from = $matches[0];
-
-		preg_match_all('(.)su', substr($to, 1, -1), $matches);
-		$to = $matches[0];
-
-		// Remove duplicates from $from, keep matching elements in $to then add missing elements
-		$from = array_unique($from);
-		$to   = array_intersect_key($to, $from);
-		$to  += array_fill_keys(array_keys(array_diff_key($from, $to)), '');
-
-		// Start building the strtr() call
-		$php = 'strtr(' . $this->convertXPath($str) . ',';
-
-		// Test whether all elements in $from and $to are exactly 1 byte long, meaning they
-		// are ASCII and with no empty strings. If so, we can use the scalar version of
-		// strtr(), otherwise we have to use the array version
-		if ([1] === array_unique(array_map('strlen', $from))
-		 && [1] === array_unique(array_map('strlen', $to)))
-		{
-			$php .= var_export(implode('', $from), true) . ',' . var_export(implode('', $to), true);
-		}
-		else
-		{
-			$elements = [];
-			foreach ($from as $k => $str)
-			{
-				$elements[] = var_export($str, true) . '=>' . var_export($to[$k], true);
-			}
-			$php .= '[' . implode(',', $elements) . ']';
-		}
-		$php .= ')';
-
-		return $php;
-	}
-
 	/**
 	* Export an XPath expression as PHP with special consideration for XPath variables
 	*
