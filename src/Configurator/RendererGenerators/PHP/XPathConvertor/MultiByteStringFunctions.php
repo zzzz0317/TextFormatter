@@ -15,7 +15,7 @@ class MultiByteStringFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Substring' => 'substring \\( (?<0>(?&value)) , (?<1>(?&value)) (?:, (?<2>(?&value)))? \\)'
+			'Substring' => 'substring \\( ((?&value)) , ((?&value)) (?:, ((?&value)))? \\)'
 		];
 	}
 }

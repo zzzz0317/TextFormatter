@@ -15,13 +15,13 @@ class StringFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Contains'        => 'contains \\( (?<0>(?&value)) , (?<1>(?&value)) \\)',
-			'NotContains'     => 'not \\( contains \\( (?<0>(?&value)) , (?<1>(?&value)) \\) \\)'
-			'StartsWith'      => 'starts-with \\( (?<0>(?&value)) , (?<1>(?&value)) \\)',
-			'StringLength'    => 'string-length \\( (?<0>(?&value)?) \\)',
-			'SubstringAfter'  => 'substring-after \\( (?<0>(?&value)) , (?<1>(?&string)) \\)',
-			'SubstringBefore' => 'substring-before \\( (?<0>(?&value)) , (?<1>(?&value)) \\)',
-			'Translate'       => 'translate \\( (?<0>(?&value)) , (?<1>(?&string)) , (?<2>(?&string)) \\)'
+			'Contains'        => 'contains \\( ((?&value)) , ((?&value)) \\)',
+			'NotContains'     => 'not \\( contains \\( ((?&value)) , ((?&value)) \\) \\)'
+			'StartsWith'      => 'starts-with \\( ((?&value)) , ((?&value)) \\)',
+			'StringLength'    => 'string-length \\( ((?&value)?) \\)',
+			'SubstringAfter'  => 'substring-after \\( ((?&value)) , ((?&string)) \\)',
+			'SubstringBefore' => 'substring-before \\( ((?&value)) , ((?&value)) \\)',
+			'Translate'       => 'translate \\( ((?&value)) , ((?&string)) , ((?&string)) \\)'
 		];
 	}
 }

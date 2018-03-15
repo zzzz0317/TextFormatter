@@ -15,11 +15,11 @@ class Core extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Attribute' => '@ (?<0>[-\\w]+)',
+			'Attribute' => '@ ([-\\w]+)',
 			'Dot'       => '\\.',
 			'Name'      => 'name \\(\\)',
 			'LocalName' => 'local-name \\(\\)',
-			'Param'     => '\\$(?<0>\\w+)',
+			'Param'     => '\\$(\\w+)',
 			'String'    => '"[^"]*"|\'[^\']*\'',
 			'Number'    => '-? \\d++'
 		];
