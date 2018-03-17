@@ -48,40 +48,18 @@ class XPathConvertor
 	{
 		$expr = trim($expr);
 
-		// XSL: <xsl:if test="@foo">
-		// PHP: if ($node->hasAttribute('foo'))
-		if (preg_match('#^@([-\\w]+)$#', $expr, $m))
-		{
-			return '$node->hasAttribute(' . var_export($m[1], true) . ')';
-		}
-
-		// XSL: <xsl:if test="@*">
-		// PHP: if ($node->attributes->length)
-		if ($expr === '@*')
-		{
-			return '$node->attributes->length';
-		}
-
-		// XSL: <xsl:if test="not(@foo)">
-		// PHP: if (!$node->hasAttribute('foo'))
-		if (preg_match('#^not\\(@([-\\w]+)\\)$#', $expr, $m))
-		{
-			return '!$node->hasAttribute(' . var_export($m[1], true) . ')';
-		}
-
-		// XSL: <xsl:if test="$foo">
-		// PHP: if ($this->params['foo']!=='')
-		if (preg_match('#^\\$(\\w+)$#', $expr, $m))
-		{
-			return '$this->params[' . var_export($m[1], true) . "]!==''";
-		}
-
-		// XSL: <xsl:if test="not($foo)">
-		// PHP: if ($this->params['foo']==='')
-		if (preg_match('#^not\\(\\$(\\w+)\\)$#', $expr, $m))
-		{
-			return '$this->params[' . var_export($m[1], true) . "]===''";
-		}
+		// Replace @attr with boolean(@attr) in boolean expressions
+		$expr = preg_replace_callback(
+			[
+				'(^(?:[$@]\\S+(?:$|\\s+(?:and|or)\\s*))+)',
+				'((?:(?:\\s+(?:and|or)\\s*)[$@]\\S+)+$)'
+			],
+			function ($m)
+			{
+				return preg_replace('(@\\S+)', 'boolean($0)', $m[0]);
+			},
+			$expr
+		);
 
 		// XSL: <xsl:if test="@foo > 1">
 		// PHP: if ($node->getAttribute('foo') > 1)
@@ -162,47 +140,6 @@ class XPathConvertor
 		return '!(' . $this->convertCondition($expr) . ')';
 	}
 
-	protected function cmp($expr1, $operator, $expr2)
-	{
-		$operands  = [];
-		$operators = [
-			'='  => '===',
-			'!=' => '!==',
-			'>'  => '>',
-			'>=' => '>=',
-			'<'  => '<',
-			'<=' => '<='
-		];
-
-		// If either operand is a number, represent it as a PHP number and replace the identity
-		// identity operators
-		foreach ([$expr1, $expr2] as $expr)
-		{
-			if (is_numeric($expr))
-			{
-				$operators['=']  = '==';
-				$operators['!='] = '!=';
-
-				$operands[] = preg_replace('(^0(.+))', '$1', $expr);
-			}
-			else
-			{
-				$operands[] = $this->convertXPath($expr);
-			}
-		}
-
-		return implode($operators[$operator], $operands);
-	}
-
-	protected function bool($expr1, $operator, $expr2)
-	{
-		$operators = [
-			'and' => '&&',
-			'or'  => '||'
-		];
-
-		return $this->convertCondition($expr1) . $operators[$operator] . $this->convertCondition($expr2);
-	}
 
 	protected function parens($expr)
 	{
@@ -357,9 +294,6 @@ class XPathConvertor
 		$exprs = [];
 		if (version_compare($this->pcreVersion, '8.13', '>='))
 		{
-			// Create a regexp that matches a comparison such as "@foo = 1"
-			// NOTE: cannot support < or > because of NaN -- (@foo<5) returns false if @foo=''
-			$exprs[] = '(?<cmp>(?<cmp0>(?&value)) (?<cmp1>!?=) (?<cmp2>(?&value)))';
 
 			// Create a regexp that matches a parenthesized expression
 			// NOTE: could be expanded to support any expression

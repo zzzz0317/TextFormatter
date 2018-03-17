@@ -15,13 +15,13 @@ class StringFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Contains'        => 'contains \\( ((?&value)) , ((?&value)) \\)',
-			'NotContains'     => 'not \\( contains \\( ((?&value)) , ((?&value)) \\) \\)'
-			'StartsWith'      => 'starts-with \\( ((?&value)) , ((?&value)) \\)',
-			'StringLength'    => 'string-length \\( ((?&value)?) \\)',
-			'SubstringAfter'  => 'substring-after \\( ((?&value)) , ((?&string)) \\)',
-			'SubstringBefore' => 'substring-before \\( ((?&value)) , ((?&value)) \\)',
-			'Translate'       => 'translate \\( ((?&value)) , ((?&string)) , ((?&string)) \\)'
+			'Contains'        => 'contains \\( ((?&Value)) , ((?&Value)) \\)',
+			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)'
+			'StartsWith'      => 'starts-with \\( ((?&Value)) , ((?&Value)) \\)',
+			'StringLength'    => 'string-length \\( ((?&Value)?) \\)',
+			'SubstringAfter'  => 'substring-after \\( ((?&Value)) , ((?&String)) \\)',
+			'SubstringBefore' => 'substring-before \\( ((?&Value)) , ((?&Value)) \\)',
+			'Translate'       => 'translate \\( ((?&Value)) , ((?&String)) , ((?&String)) \\)'
 		];
 	}
 
