@@ -49,18 +49,13 @@ class XPathConvertor
 		$expr = trim($expr);
 
 		// Replace @attr with boolean(@attr) in boolean expressions
-		$expr = preg_replace_callback(
-			[
-				'(^(?:[$@]\\S+(?:$|\\s+(?:and|or)\\s*))+)',
-				'((?:(?:\\s+(?:and|or)\\s*)[$@]\\S+)+$)'
-			],
-			function ($m)
-			{
-				return preg_replace('(@\\S+)', 'boolean($0)', $m[0]);
-			},
+		$expr = preg_replace(
+			'((^|\\s(?:and|or)\\s*)(\\(*)([$@]\\S+)(\\)*)(?=$|\\s+(?:and|or)))',
+			'$1$2boolean($3)$4',
 			$expr
 		);
 
+		// TODO: only if still valid when @foo is NaN
 		// XSL: <xsl:if test="@foo > 1">
 		// PHP: if ($node->getAttribute('foo') > 1)
 		if (preg_match('#^([$@][-\\w]+)\\s*([<>])\\s*(\\d+)$#', $expr, $m))
