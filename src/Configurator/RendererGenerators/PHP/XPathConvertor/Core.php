@@ -76,6 +76,8 @@ class Core extends AbstractConvertor
 	*/
 	public function convertNumber($number)
 	{
+		$number = ltrim($number, '0') ?: 0;
+
 		return "'" . $number . "'";
 	}
 
