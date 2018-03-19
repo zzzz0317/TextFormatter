@@ -15,13 +15,13 @@ class Core extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Attribute'     => '@ ([-\\w]+)',
-			'Dot'           => '\\.',
-			'Name'          => 'name \\(\\)',
-			'LocalName'     => 'local-name \\(\\)',
-			'Param'         => '\\$(\\w+)',
-			'String'        => '"[^"]*"|\'[^\']*\'',
-			'Number'        => '-? \\d++'
+			'Attribute' => '@ ([-\\w]+)',
+			'Dot'       => '\\.',
+			'LocalName' => 'local-name \\(\\)',
+			'Name'      => 'name \\(\\)',
+			'Number'    => '-? \\d++',
+			'Param'     => '\\$(\\w+)',
+			'String'    => '"[^"]*"|\'[^\']*\''
 		];
 	}
 
@@ -44,28 +44,6 @@ class Core extends AbstractConvertor
 	public function convertDot()
 	{
 		return '$node->textContent';
-	}
-
-	/**
-	* Convert the paramsyntax
-	*
-	* @param  string $paramName
-	* @return string
-	*/
-	public function convertParam($paramName)
-	{
-		return '$this->params[' . var_export($paramName, true) . ']';
-	}
-
-	/**
-	* Convert a literal string
-	*
-	* @param  string $string Literal string, including the quotes
-	* @return string
-	*/
-	public function convertString($string)
-	{
-		return var_export(substr($string, 1, -1), true);
 	}
 
 	/**
@@ -99,5 +77,27 @@ class Core extends AbstractConvertor
 	public function convertNumber($number)
 	{
 		return "'" . $number . "'";
+	}
+
+	/**
+	* Convert the paramsyntax
+	*
+	* @param  string $paramName
+	* @return string
+	*/
+	public function convertParam($paramName)
+	{
+		return '$this->params[' . var_export($paramName, true) . ']';
+	}
+
+	/**
+	* Convert a literal string
+	*
+	* @param  string $string Literal string, including the quotes
+	* @return string
+	*/
+	public function convertString($string)
+	{
+		return var_export(substr($string, 1, -1), true);
 	}
 }
