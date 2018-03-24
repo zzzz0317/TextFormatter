@@ -15,7 +15,7 @@ class Math extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Math' => '((?&Attribute)|(?&Number)|(?&Param)|(?&Parens)) ([-+*]|div) ((?-4)|(?-3))'
+			'Math' => '((?&Attribute)|(?&Number)|(?&Param)|(?&Parens)) ([-+*]|div) ((?R)|(?-3))'
 		];
 	}
 
@@ -31,11 +31,11 @@ class Math extends AbstractConvertor
 	{
 		if (!is_numeric($expr1))
 		{
-			$expr1 = $this->convertXPath($expr1);
+			$expr1 = $this->convert($expr1);
 		}
 		if (!is_numeric($expr2))
 		{
-			$expr2 = $this->convertXPath($expr2);
+			$expr2 = $this->convert($expr2);
 		}
 		if ($operator === 'div')
 		{

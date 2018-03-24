@@ -50,18 +50,10 @@ class XPathConvertor
 
 		// Replace @attr with boolean(@attr) in boolean expressions
 		$expr = preg_replace(
-			'((^|\\s(?:and|or)\\s*)(\\(*)([$@]\\S+)(\\)*)(?=$|\\s+(?:and|or)))',
+			'((^|\\s(?:and|or)\\s*)([\\(\\s]*)([$@]\\S+)([\\)\\s]*)(?=$|\\s+(?:and|or)))',
 			'$1$2boolean($3)$4',
 			$expr
 		);
-
-		// TODO: only if still valid when @foo is NaN
-		// XSL: <xsl:if test="@foo > 1">
-		// PHP: if ($node->getAttribute('foo') > 1)
-		if (preg_match('#^([$@][-\\w]+)\\s*([<>])\\s*(\\d+)$#', $expr, $m))
-		{
-			return $this->convertXPath($m[1]) . $m[2] . $m[3];
-		}
 
 		// If the condition does not seem to contain a relational expression, or start with a
 		// function call, we wrap it inside of a boolean() call

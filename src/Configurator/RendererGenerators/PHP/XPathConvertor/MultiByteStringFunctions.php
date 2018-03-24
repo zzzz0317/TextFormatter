@@ -31,7 +31,7 @@ class MultiByteStringFunctions extends AbstractConvertor
 	{
 		// NOTE: negative values for the second argument do not produce the same result as
 		//       specified in XPath if the argument is not a literal number
-		$php = 'mb_substr(' . $this->convertXPath($exprString) . ',';
+		$php = 'mb_substr(' . $this->convert($exprString) . ',';
 
 		// Hardcode the value if possible
 		if (is_numeric($exprPos))
@@ -40,7 +40,7 @@ class MultiByteStringFunctions extends AbstractConvertor
 		}
 		else
 		{
-			$php .= 'max(0,' . $this->convertXPath($exprPos) . '-1)';
+			$php .= 'max(0,' . $this->convert($exprPos) . '-1)';
 		}
 		$php .= ',';
 
@@ -56,7 +56,7 @@ class MultiByteStringFunctions extends AbstractConvertor
 		}
 		else
 		{
-			$php .= 'max(0,' . $this->convertXPath($exprLen) . ')';
+			$php .= 'max(0,' . $this->convert($exprLen) . ')';
 		}
 		$php .= ",'utf-8')";
 

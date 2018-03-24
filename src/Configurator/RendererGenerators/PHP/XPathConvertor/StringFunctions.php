@@ -16,7 +16,8 @@ class StringFunctions extends AbstractConvertor
 	{
 		return [
 			'Contains'        => 'contains \\( ((?&Value)) , ((?&Value)) \\)',
-			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)'
+			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
+			'NotStartsWith'   => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)',
 			'StartsWith'      => 'starts-with \\( ((?&Value)) , ((?&Value)) \\)',
 			'StringLength'    => 'string-length \\( ((?&Value)?) \\)',
 			'SubstringAfter'  => 'substring-after \\( ((?&Value)) , ((?&String)) \\)',
@@ -32,32 +33,37 @@ class StringFunctions extends AbstractConvertor
 			$expr = '.';
 		}
 
-		return "preg_match_all('(.)su'," . $this->convertXPath($expr) . ')';
+		return "preg_match_all('(.)su'," . $this->convert($expr) . ')';
 	}
 
 	public function convertContains($haystack, $needle)
 	{
-		return '(strpos(' . $this->convertXPath($haystack) . ',' . $this->convertXPath($needle) . ')!==false)';
+		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')!==false)';
 	}
 
 	public function convertNotContains($haystack, $needle)
 	{
-		return '(strpos(' . $this->convertXPath($haystack) . ',' . $this->convertXPath($needle) . ')===false)';
+		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')===false)';
+	}
+
+	public function convertNotStartsWith($string, $substring)
+	{
+		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')!==0)';
 	}
 
 	public function convertStartsWith($string, $substring)
 	{
-		return '(strpos(' . $this->convertXPath($string) . ',' . $this->convertXPath($substring) . ')===0)';
+		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')===0)';
 	}
 
 	public function convertSubstringAfter($expr, $str)
 	{
-		return 'substr(strstr(' . $this->convertXPath($expr) . ',' . $this->convertXPath($str) . '),' . (strlen($str) - 2) . ')';
+		return 'substr(strstr(' . $this->convert($expr) . ',' . $this->convert($str) . '),' . (strlen($str) - 2) . ')';
 	}
 
 	public function convertSubstringBefore($expr1, $expr2)
 	{
-		return 'strstr(' . $this->convertXPath($expr1) . ',' . $this->convertXPath($expr2) . ',true)';
+		return 'strstr(' . $this->convert($expr1) . ',' . $this->convert($expr2) . ',true)';
 	}
 
 	public function convertTranslate($expr, $from, $to)
@@ -71,7 +77,7 @@ class StringFunctions extends AbstractConvertor
 		$to   = array_intersect_key($to, $from);
 
 		// Build the strtr() call
-		$php = 'strtr(' . $this->convertXPath($expr) . ',';
+		$php = 'strtr(' . $this->convert($expr) . ',';
 		if ($this->isAsciiChars($from) && $this->isAsciiChars($to))
 		{
 			$php .= var_export(implode('', $from), true) . ',' . var_export(implode('', $to), true);

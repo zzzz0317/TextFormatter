@@ -21,6 +21,7 @@ class Core extends AbstractConvertor
 			'Name'      => 'name \\(\\)',
 			'Number'    => '-? \\d++',
 			'Param'     => '\\$(\\w+)',
+			'Parens'    => '\\( (?R) \\)',
 			'String'    => '"[^"]*"|\'[^\']*\''
 		];
 	}
@@ -90,6 +91,17 @@ class Core extends AbstractConvertor
 	public function convertParam($paramName)
 	{
 		return '$this->params[' . var_export($paramName, true) . ']';
+	}
+
+	/**
+	* Convert a parenthesized expression
+	*
+	* @param  string $expr
+	* @return string
+	*/
+	public function convertParens($expr)
+	{
+		return '(' . $this->convert($expr) . ')';
 	}
 
 	/**

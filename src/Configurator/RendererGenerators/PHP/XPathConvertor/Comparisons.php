@@ -54,7 +54,7 @@ class Comparisons extends AbstractConvertor
 			}
 			else
 			{
-				$operands[] = $this->convertXPath($expr);
+				$operands[] = $this->convert($expr);
 			}
 		}
 

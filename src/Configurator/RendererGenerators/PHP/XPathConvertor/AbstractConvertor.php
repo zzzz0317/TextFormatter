@@ -47,18 +47,7 @@ abstract class AbstractConvertor
 	* @param  string $expr
 	* @return string
 	*/
-	protected function convertCondition($expr)
-	{
-		$this->convertor->convertCondition($expr);
-	}
-
-	/**
-	* 
-	*
-	* @param  string $expr
-	* @return string
-	*/
-	protected function convertXPath($expr)
+	protected function convert($expr)
 	{
 		$this->convertor->convertXPath($expr);
 	}
