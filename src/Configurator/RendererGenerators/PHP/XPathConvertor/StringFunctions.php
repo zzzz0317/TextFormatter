@@ -16,14 +16,22 @@ class StringFunctions extends AbstractConvertor
 	{
 		return [
 			'Contains'        => 'contains \\( ((?&Value)) , ((?&Value)) \\)',
-			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
-			'NotStartsWith'   => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)',
 			'StartsWith'      => 'starts-with \\( ((?&Value)) , ((?&Value)) \\)',
 			'StringLength'    => 'string-length \\( ((?&Value)?) \\)',
 			'SubstringAfter'  => 'substring-after \\( ((?&Value)) , ((?&String)) \\)',
 			'SubstringBefore' => 'substring-before \\( ((?&Value)) , ((?&Value)) \\)',
 			'Translate'       => 'translate \\( ((?&Value)) , ((?&String)) , ((?&String)) \\)'
 		];
+	}
+
+	public function convertContains($haystack, $needle)
+	{
+		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')!==false)';
+	}
+
+	public function convertStartsWith($string, $substring)
+	{
+		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')===0)';
 	}
 
 	public function convertStringLength($expr)
@@ -34,26 +42,6 @@ class StringFunctions extends AbstractConvertor
 		}
 
 		return "preg_match_all('(.)su'," . $this->convert($expr) . ')';
-	}
-
-	public function convertContains($haystack, $needle)
-	{
-		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')!==false)';
-	}
-
-	public function convertNotContains($haystack, $needle)
-	{
-		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')===false)';
-	}
-
-	public function convertNotStartsWith($string, $substring)
-	{
-		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')!==0)';
-	}
-
-	public function convertStartsWith($string, $substring)
-	{
-		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')===0)';
 	}
 
 	public function convertSubstringAfter($expr, $str)

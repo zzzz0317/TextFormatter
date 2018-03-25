@@ -7,7 +7,7 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
-class Math extends AbstractConvertor
+class NumericExpressions extends AbstractConvertor
 {
 	/**
 	* {@inheritdoc}
@@ -15,7 +15,8 @@ class Math extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Math' => '((?&Attribute)|(?&Number)|(?&Param)|(?&Parens)) ([-+*]|div) ((?R)|(?-3))'
+			'Math'   => '((?&Core)|(?&Number)) ([-+*]|div) ((?&Core)|(?&Math)|(?&Number))',
+			'Number' => '-? \\d++'
 		];
 	}
 

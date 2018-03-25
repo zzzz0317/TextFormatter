@@ -19,7 +19,9 @@ class BooleanFunctions extends AbstractConvertor
 			'HasAttribute'  => 'boolean \\( @ ([-\\w]+) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
 			'NotAttribute'  => 'not \\( @ ([-\\w]+) \\)',
-			'NotParam'      => 'not \\( \\$(\\w+) \\)'
+			'NotContains'   => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
+			'NotParam'      => 'not \\( \\$(\\w+) \\)',
+			'NotStartsWith' => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)'
 		];
 	}
 
@@ -67,6 +69,11 @@ class BooleanFunctions extends AbstractConvertor
 		return '!$node->hasAttribute(' . var_export($attrName, true) . ')';
 	}
 
+	public function convertNotContains($haystack, $needle)
+	{
+		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')===false)';
+	}
+
 	/**
 	* Convert a call to not() with a param
 	*
@@ -76,5 +83,10 @@ class BooleanFunctions extends AbstractConvertor
 	public function convertNotParam($paramName)
 	{
 		return '($this->params[' . var_export($paramName, true) . "]==='')";
+	}
+
+	public function convertNotStartsWith($string, $substring)
+	{
+		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')!==0)';
 	}
 }

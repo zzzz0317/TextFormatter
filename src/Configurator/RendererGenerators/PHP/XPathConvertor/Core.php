@@ -19,7 +19,6 @@ class Core extends AbstractConvertor
 			'Dot'       => '\\.',
 			'LocalName' => 'local-name \\(\\)',
 			'Name'      => 'name \\(\\)',
-			'Number'    => '-? \\d++',
 			'Param'     => '\\$(\\w+)',
 			'Parens'    => '\\( (?R) \\)',
 			'String'    => '"[^"]*"|\'[^\']*\''
