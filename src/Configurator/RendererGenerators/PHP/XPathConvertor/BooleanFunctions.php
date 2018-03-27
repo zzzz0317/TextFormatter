@@ -12,6 +12,20 @@ class BooleanFunctions extends AbstractConvertor
 	/**
 	* {@inheritdoc}
 	*/
+	public function getRegexpGroups()
+	{
+		return [
+			'BooleanParam'  => 'BooleanExpr',
+			'HasAttribute'  => 'BooleanExpr',
+			'HasAttributes' => 'BooleanExpr',
+			'NotAttribute'  => 'BooleanExpr',
+			'NotParam'      => 'BooleanExpr'
+		];
+	}
+
+	/**
+	* {@inheritdoc}
+	*/
 	public function getRegexps()
 	{
 		return [
@@ -19,9 +33,7 @@ class BooleanFunctions extends AbstractConvertor
 			'HasAttribute'  => 'boolean \\( @ ([-\\w]+) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
 			'NotAttribute'  => 'not \\( @ ([-\\w]+) \\)',
-			'NotContains'   => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
-			'NotParam'      => 'not \\( \\$(\\w+) \\)',
-			'NotStartsWith' => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)'
+			'NotParam'      => 'not \\( \\$(\\w+) \\)'
 		];
 	}
 

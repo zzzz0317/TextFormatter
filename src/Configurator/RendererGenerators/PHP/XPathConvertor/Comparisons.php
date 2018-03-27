@@ -23,11 +23,11 @@ class Comparisons extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Equality'             => '((?&Value)) (!?=) ((?&Value))',
-			'LessThan'             => '(\\d+) (<) ((?&Value))',
-			'LessThanOrEqualTo'    => '([1-9]\\d*) (<=) ((?&Value))',
-			'GreaterThan'          => '((?&Value)) (>) (\\d+)',
-			'GreaterThanOrEqualTo' => '((?&Value)) (>=) ([1-9]\\d*)'
+			'Equality'             => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)|(?&StringExpr)) (!?=) ((?&Attribute)|(?&NumericExpr)|(?&Parameter)|(?&StringExpr))',
+			'LessThan'             => '(\\d+) (<) ((?&Attribute)|(?&NumericExpr)|(?&Parameter))',
+			'LessThanOrEqualTo'    => '([1-9]\\d*) (<=) ((?&Attribute)|(?&NumericExpr)|(?&Parameter))',
+			'GreaterThan'          => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)) (>) (\\d+)',
+			'GreaterThanOrEqualTo' => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)) (>=) ([1-9]\\d*)'
 		];
 	}
 

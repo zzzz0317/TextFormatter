@@ -25,6 +25,16 @@ abstract class AbstractConvertor
 	}
 
 	/**
+	* Return the name of the group each regexp belongs to
+	*
+	* @return array
+	*/
+	public function getRegexpGroups()
+	{
+		return [];
+	}
+
+	/**
 	* 
 	*
 	* @return array

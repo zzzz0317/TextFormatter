@@ -7,16 +7,30 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
-class MultiByteStringFunctions extends AbstractConvertor
+class MultiByteStringFunctions extends SingleByteStringFunctions
 {
+	/**
+	* {@inheritdoc}
+	*/
+	public function getRegexpGroups()
+	{
+		$groups = [
+			'Substring' => 'StringExpr'
+		];
+
+		return $groups += parent::getRegexpGroups();
+	}
+
 	/**
 	* {@inheritdoc}
 	*/
 	public function getRegexps()
 	{
-		return [
+		$regexps = [
 			'Substring' => 'substring \\( ((?&Core)|(?&Math)) , ((?&Core)|(?&Math)) (?:, ((?&Core)|(?&Math)))? \\)'
 		];
+
+		return $regexps + parent::getRegexps();
 	}
 
 	/**

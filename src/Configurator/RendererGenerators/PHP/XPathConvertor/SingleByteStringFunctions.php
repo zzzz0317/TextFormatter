@@ -7,8 +7,25 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
-class StringFunctions extends AbstractConvertor
+class SingleByteStringFunctions extends AbstractConvertor
 {
+	/**
+	* {@inheritdoc}
+	*/
+	public function getRegexpGroups()
+	{
+		return [
+			'Contains'        => 'BooleanExpr',
+			'NotContains'     => 'BooleanExpr',
+			'NotStartsWith'   => 'BooleanExpr',
+			'StartsWith'      => 'BooleanExpr',
+			'StringLength'    => 'NumericExpr',
+			'SubstringAfter'  => 'StringExpr',
+			'SubstringBefore' => 'StringExpr',
+			'Translate'       => 'StringExpr'
+		];
+	}
+
 	/**
 	* {@inheritdoc}
 	*/
@@ -16,6 +33,8 @@ class StringFunctions extends AbstractConvertor
 	{
 		return [
 			'Contains'        => 'contains \\( ((?&Value)) , ((?&Value)) \\)',
+			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
+			'NotStartsWith'   => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)',
 			'StartsWith'      => 'starts-with \\( ((?&Value)) , ((?&Value)) \\)',
 			'StringLength'    => 'string-length \\( ((?&Value)?) \\)',
 			'SubstringAfter'  => 'substring-after \\( ((?&Value)) , ((?&String)) \\)',
