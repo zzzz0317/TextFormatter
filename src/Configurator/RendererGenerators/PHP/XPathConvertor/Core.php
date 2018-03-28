@@ -17,12 +17,10 @@ class Core extends AbstractConvertor
 		return [
 			'Attribute'     => 'String',
 			'Dot'           => 'String',
-			'LiteralNumber' => '-? \\d++',
 			'LiteralString' => 'String',
 			'LocalName'     => 'String',
-			'Name'          => 'String',,
+			'Name'          => 'String',
 			'Parameter'     => 'String',
-			'Parens'        => 'String',
 			'Parens'        => 'String'
 		];
 	}
@@ -33,13 +31,14 @@ class Core extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Attribute' => '@ ([-\\w]+)',
-			'Dot'       => '\\.',
-			'LocalName' => 'local-name \\(\\)',
-			'Name'      => 'name \\(\\)',
-			'Parameter' => '\\$(\\w+)',
-			'Parens'    => '\\( (?R) \\)',
-			'StringLiteral' => '"[^"]*"|\'[^\']*\''
+			'Attribute'     => '@ ([-\\w]+)',
+			'Dot'           => '\\.',
+			'LiteralNumber' => '(-?) (\\d++)',
+			'LiteralString' => '"[^"]*"|\'[^\']*\'',
+			'LocalName'     => 'local-name \\(\\)',
+			'Name'          => 'name \\(\\)',
+			'Parameter'     => '\\$(\\w+)',
+			'Parens'        => '\\( (?R) \\)'
 		];
 	}
 
@@ -67,14 +66,13 @@ class Core extends AbstractConvertor
 	/**
 	* Convert a literal number
 	*
+	* @param  string $sign
 	* @param  string $number
 	* @return string
 	*/
-	public function convertLiteralNumber($number)
+	public function convertLiteralNumber($sign, $number)
 	{
-		$number = ltrim($number, '0') ?: '0';
-
-		return "'" . $number . "'";
+		return "'" . self::normalizeNumber($sign . $number) . "'";
 	}
 
 	/**
@@ -111,7 +109,7 @@ class Core extends AbstractConvertor
 	}
 
 	/**
-	* Convert the paramsyntax
+	* Convert the parameter syntax
 	*
 	* @param  string $paramName
 	* @return string
@@ -130,5 +128,20 @@ class Core extends AbstractConvertor
 	public function convertParens($expr)
 	{
 		return '(' . $this->convert($expr) . ')';
+	}
+
+	/**
+	* Normalize a number representation
+	*
+	* @param  string $sign
+	* @param  string $number
+	* @return string
+	*/
+	public static function normalizeNumber($sign, $number)
+	{
+		// Remove leading zeros and normalize -0 to 0
+		$number = ltrim($number, '0');
+
+		return ($number === '') ? '0' : $sign . $number;
 	}
 }

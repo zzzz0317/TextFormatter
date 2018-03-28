@@ -32,40 +32,113 @@ class Comparisons extends AbstractConvertor
 		return [
 			'Equality'             => '((?&Number)|(?&String)) = ((?&Number)|(?&String))',
 			'GreaterThan'          => '((?&Number)|(?&String)) > (\\d+)',
-			'GreaterThanOrEqualTo' => '((?&Number)|(?&String)) >= ([1-9]\\d*)',
+			'GreaterThanOrEqualTo' => '((?&Number)|(?&String)) >= (0*[1-9]\\d*)',
 			'LessThan'             => '(\\d+) < ((?&Number)|(?&String))',
-			'LessThanOrEqualTo'    => '([1-9]\\d*) <= ((?&Number)|(?&String))',
+			'LessThanOrEqualTo'    => '(0*[1-9]\\d*) <= ((?&Number)|(?&String))',
 			'NonEquality'          => '((?&Number)|(?&String)) != ((?&Number)|(?&String))'
 		];
 	}
 
 	/**
-	* Convert a call to boolean() with an attribute
+	* Convert an equality test
 	*
-	* @param  string $attrName
+	* @param  string $expr1
+	* @param  string $expr2
 	* @return string
 	*/
-	public function convertEquality($expr1, $operator, $expr2)
+	public function convertEquality($expr1, $expr2)
 	{
-		
+		$operator = ($this->isNumber($expr1) && $this->isNumber($expr2)) ? '===' : '==';
 
-		// If either operand is a number, represent it as a PHP number and replace the identity
-		// identity operators
-		foreach ([$expr1, $expr2] as $expr)
-		{
-			if (is_numeric($expr))
-			{
-				$operators['=']  = '==';
-				$operators['!='] = '!=';
+		return $this->convertComparison($expr1, $operator, $expr2);
+	}
 
-				$operands[] = preg_replace('(^0(.+))', '$1', $expr);
-			}
-			else
-			{
-				$operands[] = $this->convert($expr);
-			}
-		}
+	/**
+	* Convert a "greater than" comparison
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertGreaterThan($expr1, $expr2)
+	{
+		return $this->convertComparison($expr1, '>', $expr2);
+	}
 
-		return implode($operators[$operator], $operands);
+	/**
+	* Convert a "greater than or equal to" comparison
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertGreaterThanOrEqualTo($expr1, $expr2)
+	{
+		return $this->convertComparison($expr1, '>=', $expr2);
+	}
+
+	/**
+	* Convert a "less than" comparison
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertLessThan($expr1, $expr2)
+	{
+		return $this->convertComparison($expr1, '<', $expr2);
+	}
+
+	/**
+	* Convert a "less than or equal to" comparison
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertLessThanOrEqualTo($expr1, $expr2)
+	{
+		return $this->convertComparison($expr1, '<=', $expr2);
+	}
+
+	/**
+	* Convert a non-equality test
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertNonEquality($expr1, $expr2)
+	{
+		$operator = ($this->isNumber($expr1) && $this->isNumber($expr2)) ? '!==' : '!=';
+
+		return $this->convertComparison($expr1, $operator, $expr2);
+	}
+
+	/**
+	* Convert a comparison
+	*
+	* @param  string $expr1
+	* @param  string $operator
+	* @param  string $expr2
+	* @return string
+	*/
+	protected function convertComparison($expr1, $operator, $expr2)
+	{
+		$expr1 = ($this->isNumber($expr1)) ? Core::normalizeNumber($expr1) : $this->convert($expr1);
+		$expr2 = ($this->isNumber($expr2)) ? Core::normalizeNumber($expr2) : $this->convert($expr2);
+
+		return $expr1 . $operator . $expr2;
+	}
+
+	/**
+	* Test whether given expression is a literal number
+	*
+	* @param  string $expr
+	* @return bool
+	*/
+	protected function isNumber($expr)
+	{
+		return (bool) preg_match('(^-?\\s*\\d++$)', $expr);
 	}
 }
