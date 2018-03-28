@@ -15,11 +15,11 @@ class BooleanFunctions extends AbstractConvertor
 	public function getRegexpGroups()
 	{
 		return [
-			'BooleanParam'  => 'BooleanExpr',
-			'HasAttribute'  => 'BooleanExpr',
-			'HasAttributes' => 'BooleanExpr',
-			'NotAttribute'  => 'BooleanExpr',
-			'NotParam'      => 'BooleanExpr'
+			'BooleanParam'  => 'Boolean',
+			'HasAttribute'  => 'Boolean',
+			'HasAttributes' => 'Boolean',
+			'NotAttribute'  => 'Boolean',
+			'NotParam'      => 'Boolean'
 		];
 	}
 
@@ -29,11 +29,11 @@ class BooleanFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'BooleanParam'  => 'boolean \\( \\$(\\w+) \\)',
-			'HasAttribute'  => 'boolean \\( @ ([-\\w]+) \\)',
+			'BooleanParam'  => 'boolean \\( (?&Parameter) \\)',
+			'HasAttribute'  => 'boolean \\( (?&Attribute) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
-			'NotAttribute'  => 'not \\( @ ([-\\w]+) \\)',
-			'NotParam'      => 'not \\( \\$(\\w+) \\)'
+			'NotAttribute'  => 'not \\( (?&Attribute) \\)',
+			'NotParam'      => 'not \\( (?&Parameter) \\)'
 		];
 	}
 
@@ -81,11 +81,6 @@ class BooleanFunctions extends AbstractConvertor
 		return '!$node->hasAttribute(' . var_export($attrName, true) . ')';
 	}
 
-	public function convertNotContains($haystack, $needle)
-	{
-		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')===false)';
-	}
-
 	/**
 	* Convert a call to not() with a param
 	*
@@ -95,10 +90,5 @@ class BooleanFunctions extends AbstractConvertor
 	public function convertNotParam($paramName)
 	{
 		return '($this->params[' . var_export($paramName, true) . "]==='')";
-	}
-
-	public function convertNotStartsWith($string, $substring)
-	{
-		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')!==0)';
 	}
 }

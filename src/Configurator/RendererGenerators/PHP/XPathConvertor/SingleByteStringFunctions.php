@@ -48,6 +48,23 @@ class SingleByteStringFunctions extends AbstractConvertor
 		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')!==false)';
 	}
 
+	/**
+	* Convert a call to not(contains())
+	*
+	* @param  string $haystack Expression for the haystack part of the call
+	* @param  string $needle   Expression for the needle part of the call
+	* @return string
+	*/
+	public function convertNotContains($haystack, $needle)
+	{
+		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')===false)';
+	}
+
+	public function convertNotStartsWith($string, $substring)
+	{
+		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')!==0)';
+	}
+
 	public function convertStartsWith($string, $substring)
 	{
 		return '(strpos(' . $this->convert($string) . ',' . $this->convert($substring) . ')===0)';

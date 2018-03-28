@@ -42,16 +42,6 @@ abstract class AbstractConvertor
 	abstract public function getRegexps();
 
 	/**
-	* Return whether this convertor can be used recursively
-	*
-	* @return bool
-	*/
-	public function canRecurse()
-	{
-		return true;
-	}
-
-	/**
 	* 
 	*
 	* @param  string $expr

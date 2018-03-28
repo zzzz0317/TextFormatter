@@ -12,6 +12,24 @@ class Core extends AbstractConvertor
 	/**
 	* {@inheritdoc}
 	*/
+	public function getRegexpGroups()
+	{
+		return [
+			'Attribute'     => 'String',
+			'Dot'           => 'String',
+			'LiteralNumber' => '-? \\d++',
+			'LiteralString' => 'String',
+			'LocalName'     => 'String',
+			'Name'          => 'String',,
+			'Parameter'     => 'String',
+			'Parens'        => 'String',
+			'Parens'        => 'String'
+		];
+	}
+
+	/**
+	* {@inheritdoc}
+	*/
 	public function getRegexps()
 	{
 		return [
@@ -21,7 +39,7 @@ class Core extends AbstractConvertor
 			'Name'      => 'name \\(\\)',
 			'Parameter' => '\\$(\\w+)',
 			'Parens'    => '\\( (?R) \\)',
-			'String'    => '"[^"]*"|\'[^\']*\''
+			'StringLiteral' => '"[^"]*"|\'[^\']*\''
 		];
 	}
 
@@ -47,6 +65,30 @@ class Core extends AbstractConvertor
 	}
 
 	/**
+	* Convert a literal number
+	*
+	* @param  string $number
+	* @return string
+	*/
+	public function convertLiteralNumber($number)
+	{
+		$number = ltrim($number, '0') ?: '0';
+
+		return "'" . $number . "'";
+	}
+
+	/**
+	* Convert a literal string
+	*
+	* @param  string $string Literal string, including the quotes
+	* @return string
+	*/
+	public function convertLiteralString($string)
+	{
+		return var_export(substr($string, 1, -1), true);
+	}
+
+	/**
 	* Convert a local-name() function call
 	*
 	* @param  string $attrName
@@ -69,19 +111,6 @@ class Core extends AbstractConvertor
 	}
 
 	/**
-	* Convert a literal number
-	*
-	* @param  string $number
-	* @return string
-	*/
-	public function convertNumber($number)
-	{
-		$number = ltrim($number, '0') ?: '0';
-
-		return "'" . $number . "'";
-	}
-
-	/**
 	* Convert the paramsyntax
 	*
 	* @param  string $paramName
@@ -101,16 +130,5 @@ class Core extends AbstractConvertor
 	public function convertParens($expr)
 	{
 		return '(' . $this->convert($expr) . ')';
-	}
-
-	/**
-	* Convert a literal string
-	*
-	* @param  string $string Literal string, including the quotes
-	* @return string
-	*/
-	public function convertString($string)
-	{
-		return var_export(substr($string, 1, -1), true);
 	}
 }

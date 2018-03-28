@@ -15,8 +15,7 @@ class NumericExpressions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Math'   => '((?&Core)|(?&Number)) ([-+*]|div) ((?&Core)|(?&Math)|(?&Number))',
-			'Number' => '-? \\d++'
+			'Math' => '((?&Core)|(?&Number)) ([-+*]|div) ((?&Core)|(?&Math)|(?&Number))'
 		];
 	}
 

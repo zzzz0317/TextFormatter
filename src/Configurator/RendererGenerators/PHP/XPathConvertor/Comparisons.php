@@ -12,9 +12,16 @@ class Comparisons extends AbstractConvertor
 	/**
 	* {@inheritdoc}
 	*/
-	public function canRecurse()
+	public function getRegexpGroups()
 	{
-		return false;
+		return [
+			'Equality'             => 'Comparison',
+			'GreaterThan'          => 'Comparison',
+			'GreaterThanOrEqualTo' => 'Comparison',
+			'LessThan'             => 'Comparison',
+			'LessThanOrEqualTo'    => 'Comparison',
+			'NonEquality'          => 'Comparison'
+		];
 	}
 
 	/**
@@ -23,11 +30,12 @@ class Comparisons extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Equality'             => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)|(?&StringExpr)) (!?=) ((?&Attribute)|(?&NumericExpr)|(?&Parameter)|(?&StringExpr))',
-			'LessThan'             => '(\\d+) (<) ((?&Attribute)|(?&NumericExpr)|(?&Parameter))',
-			'LessThanOrEqualTo'    => '([1-9]\\d*) (<=) ((?&Attribute)|(?&NumericExpr)|(?&Parameter))',
-			'GreaterThan'          => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)) (>) (\\d+)',
-			'GreaterThanOrEqualTo' => '((?&Attribute)|(?&NumericExpr)|(?&Parameter)) (>=) ([1-9]\\d*)'
+			'Equality'             => '((?&Number)|(?&String)) = ((?&Number)|(?&String))',
+			'GreaterThan'          => '((?&Number)|(?&String)) > (\\d+)',
+			'GreaterThanOrEqualTo' => '((?&Number)|(?&String)) >= ([1-9]\\d*)',
+			'LessThan'             => '(\\d+) < ((?&Number)|(?&String))',
+			'LessThanOrEqualTo'    => '([1-9]\\d*) <= ((?&Number)|(?&String))',
+			'NonEquality'          => '((?&Number)|(?&String)) != ((?&Number)|(?&String))'
 		];
 	}
 
