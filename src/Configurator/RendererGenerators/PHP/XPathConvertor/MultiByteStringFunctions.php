@@ -14,11 +14,10 @@ class MultiByteStringFunctions extends SingleByteStringFunctions
 	*/
 	public function getRegexpGroups()
 	{
-		$groups = [
-			'Substring' => 'StringExpr'
-		];
+		$groups              = parent::getRegexpGroups();
+		$groups['Substring'] = 'String';
 
-		return $groups += parent::getRegexpGroups();
+		return $groups += ;
 	}
 
 	/**
@@ -26,11 +25,10 @@ class MultiByteStringFunctions extends SingleByteStringFunctions
 	*/
 	public function getRegexps()
 	{
-		$regexps = [
-			'Substring' => 'substring \\( ((?&Core)|(?&Math)) , ((?&Core)|(?&Math)) (?:, ((?&Core)|(?&Math)))? \\)'
-		];
+		$regexps              = parent::getRegexps();
+		$regexps['Substring'] = 'substring \\( ((?&String)) , ((?&Number)) (?:, ((?&Number)))? \\)';
 
-		return $regexps + parent::getRegexps();
+		return $regexps;
 	}
 
 	/**

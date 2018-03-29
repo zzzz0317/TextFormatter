@@ -51,4 +51,41 @@ abstract class AbstractConvertor
 	{
 		$this->convertor->convertXPath($expr);
 	}
+
+	/**
+	* Convert given expression
+	*
+	* @param  string $expr
+	* @return string
+	*/
+	protected function convertExpression($expr)
+	{
+		return ($this->isNumber($expr)) ? $this->normalizeNumber($expr) : $this->convert($expr);
+	}
+
+	/**
+	* Test whether given expression is a literal number
+	*
+	* @param  string $expr
+	* @return bool
+	*/
+	protected function isNumber($expr)
+	{
+		return (bool) preg_match('(^-?\\s*\\d++$)', $expr);
+	}
+
+	/**
+	* Normalize a number representation
+	*
+	* @param  string $sign
+	* @param  string $number
+	* @return string
+	*/
+	protected function normalizeNumber($sign, $number)
+	{
+		// Remove leading zeros and normalize -0 to 0
+		$number = ltrim($number, '0');
+
+		return ($number === '') ? '0' : $sign . $number;
+	}
 }

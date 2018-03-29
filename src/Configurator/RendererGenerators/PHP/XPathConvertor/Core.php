@@ -20,8 +20,7 @@ class Core extends AbstractConvertor
 			'LiteralString' => 'String',
 			'LocalName'     => 'String',
 			'Name'          => 'String',
-			'Parameter'     => 'String',
-			'Parens'        => 'String'
+			'Parameter'     => 'String'
 		];
 	}
 
@@ -37,8 +36,7 @@ class Core extends AbstractConvertor
 			'LiteralString' => '"[^"]*"|\'[^\']*\'',
 			'LocalName'     => 'local-name \\(\\)',
 			'Name'          => 'name \\(\\)',
-			'Parameter'     => '\\$(\\w+)',
-			'Parens'        => '\\( (?R) \\)'
+			'Parameter'     => '\\$(\\w+)'
 		];
 	}
 
@@ -72,7 +70,7 @@ class Core extends AbstractConvertor
 	*/
 	public function convertLiteralNumber($sign, $number)
 	{
-		return "'" . self::normalizeNumber($sign . $number) . "'";
+		return "'" . $this->normalizeNumber($sign . $number) . "'";
 	}
 
 	/**
@@ -117,31 +115,5 @@ class Core extends AbstractConvertor
 	public function convertParam($paramName)
 	{
 		return '$this->params[' . var_export($paramName, true) . ']';
-	}
-
-	/**
-	* Convert a parenthesized expression
-	*
-	* @param  string $expr
-	* @return string
-	*/
-	public function convertParens($expr)
-	{
-		return '(' . $this->convert($expr) . ')';
-	}
-
-	/**
-	* Normalize a number representation
-	*
-	* @param  string $sign
-	* @param  string $number
-	* @return string
-	*/
-	public static function normalizeNumber($sign, $number)
-	{
-		// Remove leading zeros and normalize -0 to 0
-		$number = ltrim($number, '0');
-
-		return ($number === '') ? '0' : $sign . $number;
 	}
 }

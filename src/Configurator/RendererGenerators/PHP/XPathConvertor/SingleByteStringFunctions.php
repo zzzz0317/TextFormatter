@@ -15,14 +15,14 @@ class SingleByteStringFunctions extends AbstractConvertor
 	public function getRegexpGroups()
 	{
 		return [
-			'Contains'        => 'BooleanExpr',
-			'NotContains'     => 'BooleanExpr',
-			'NotStartsWith'   => 'BooleanExpr',
-			'StartsWith'      => 'BooleanExpr',
-			'StringLength'    => 'NumericExpr',
-			'SubstringAfter'  => 'StringExpr',
-			'SubstringBefore' => 'StringExpr',
-			'Translate'       => 'StringExpr'
+			'Contains'        => 'Boolean',
+			'NotContains'     => 'Boolean',
+			'NotStartsWith'   => 'Boolean',
+			'StartsWith'      => 'Boolean',
+			'StringLength'    => 'Number',
+			'SubstringAfter'  => 'String',
+			'SubstringBefore' => 'String',
+			'Translate'       => 'String'
 		];
 	}
 
@@ -32,14 +32,14 @@ class SingleByteStringFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Contains'        => 'contains \\( ((?&Value)) , ((?&Value)) \\)',
-			'NotContains'     => 'not \\( contains \\( ((?&Value)) , ((?&Value)) \\) \\)',
-			'NotStartsWith'   => 'not \\( starts-with \\( ((?&Value)) , ((?&Value)) \\) \\)',
-			'StartsWith'      => 'starts-with \\( ((?&Value)) , ((?&Value)) \\)',
-			'StringLength'    => 'string-length \\( ((?&Value)?) \\)',
-			'SubstringAfter'  => 'substring-after \\( ((?&Value)) , ((?&String)) \\)',
-			'SubstringBefore' => 'substring-before \\( ((?&Value)) , ((?&Value)) \\)',
-			'Translate'       => 'translate \\( ((?&Value)) , ((?&String)) , ((?&String)) \\)'
+			'Contains'        => 'contains \\( ((?&String)) , ((?&String)) \\)',
+			'NotContains'     => 'not \\( contains \\( ((?&String)) , ((?&String)) \\) \\)',
+			'NotStartsWith'   => 'not \\( starts-with \\( ((?&String)) , ((?&String)) \\) \\)',
+			'StartsWith'      => 'starts-with \\( ((?&String)) , ((?&String)) \\)',
+			'StringLength'    => 'string-length \\( ((?&String)?) \\)',
+			'SubstringAfter'  => 'substring-after \\( ((?&String)) , ((?&LiteralString)) \\)',
+			'SubstringBefore' => 'substring-before \\( ((?&String)) , ((?&String)) \\)',
+			'Translate'       => 'translate \\( ((?&String)) , ((?&LiteralString)) , ((?&LiteralString)) \\)'
 		];
 	}
 

@@ -20,7 +20,8 @@ class Comparisons extends AbstractConvertor
 			'GreaterThanOrEqualTo' => 'Comparison',
 			'LessThan'             => 'Comparison',
 			'LessThanOrEqualTo'    => 'Comparison',
-			'NonEquality'          => 'Comparison'
+			'NonEquality'          => 'Comparison',
+			'Not'                  => 'Boolean'
 		];
 	}
 
@@ -125,20 +126,6 @@ class Comparisons extends AbstractConvertor
 	*/
 	protected function convertComparison($expr1, $operator, $expr2)
 	{
-		$expr1 = ($this->isNumber($expr1)) ? Core::normalizeNumber($expr1) : $this->convert($expr1);
-		$expr2 = ($this->isNumber($expr2)) ? Core::normalizeNumber($expr2) : $this->convert($expr2);
-
-		return $expr1 . $operator . $expr2;
-	}
-
-	/**
-	* Test whether given expression is a literal number
-	*
-	* @param  string $expr
-	* @return bool
-	*/
-	protected function isNumber($expr)
-	{
-		return (bool) preg_match('(^-?\\s*\\d++$)', $expr);
+		return $this->convertExpression($expr1) . $operator . $this->convertExpression($expr2);
 	}
 }

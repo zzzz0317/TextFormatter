@@ -18,6 +18,7 @@ class BooleanFunctions extends AbstractConvertor
 			'BooleanParam'  => 'Boolean',
 			'HasAttribute'  => 'Boolean',
 			'HasAttributes' => 'Boolean',
+			'Not'           => 'Boolean',
 			'NotAttribute'  => 'Boolean',
 			'NotParam'      => 'Boolean'
 		];
@@ -32,20 +33,10 @@ class BooleanFunctions extends AbstractConvertor
 			'BooleanParam'  => 'boolean \\( (?&Parameter) \\)',
 			'HasAttribute'  => 'boolean \\( (?&Attribute) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
+			'Not'           => 'not \\( ((?&Boolean)|(?&Comparison)) \\)',
 			'NotAttribute'  => 'not \\( (?&Attribute) \\)',
 			'NotParam'      => 'not \\( (?&Parameter) \\)'
 		];
-	}
-
-	/**
-	* Convert a call to boolean() with an attribute
-	*
-	* @param  string $attrName
-	* @return string
-	*/
-	public function convertHasAttribute($attrName)
-	{
-		return '$node->hasAttribute(' . var_export($attrName, true) . ')';
 	}
 
 	/**
@@ -60,14 +51,35 @@ class BooleanFunctions extends AbstractConvertor
 	}
 
 	/**
-	* Convert a 
+	* Convert a call to boolean() with an attribute
 	*
 	* @param  string $attrName
+	* @return string
+	*/
+	public function convertHasAttribute($attrName)
+	{
+		return '$node->hasAttribute(' . var_export($attrName, true) . ')';
+	}
+
+	/**
+	* Convert a call to boolean(@*)
+	*
 	* @return string
 	*/
 	public function convertHasAttributes($attrName)
 	{
 		return '$node->attributes->length';
+	}
+
+	/**
+	* Convert a call to not() with a boolean expression
+	*
+	* @param  string $expr
+	* @return string
+	*/
+	public function convertNot($expr)
+	{
+		return '!(' . $this->convertConditional($expr) . ')';
 	}
 
 	/**
