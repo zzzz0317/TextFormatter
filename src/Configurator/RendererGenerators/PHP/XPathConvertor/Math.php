@@ -25,11 +25,13 @@ class Math extends AbstractConvertor
 	*/
 	public function getRegexps()
 	{
+		$numberish = '((?&Attribute)|(?&Number)|(?&Parameter))';
+
 		return [
-			'Addition'          => '((?&Attribute)|(?&Number)|(?&Parameter)) \\+ ((?&Attribute)|(?&Number)|(?&Parameter))',
-			'Division'          => '((?&Attribute)|(?&Number)|(?&Parameter)) - ((?&Attribute)|(?&Number)|(?&Parameter))',
-			'Multiplication'    => '((?&Attribute)|(?&Number)|(?&Parameter)) \\* ((?&Attribute)|(?&Number)|(?&Parameter))',
-			'Substraction'      => '((?&Attribute)|(?&Number)|(?&Parameter)) div ((?&Attribute)|(?&Number)|(?&Parameter))',
+			'Addition'          => $numberish . ' \\+ ' . $numberish,
+			'Division'          => $numberish . ' - ' . $numberish,
+			'Multiplication'    => $numberish . ' \\* ' . $numberish,
+			'Substraction'      => $numberish . ' div ' . $numberish,
 			'ParenthesizedMath' => '\\( ((?&Number)) \\)'
 		];
 	}
