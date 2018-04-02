@@ -26,7 +26,7 @@ class MultiByteStringFunctions extends SingleByteStringFunctions
 	public function getRegexps()
 	{
 		$regexps              = parent::getRegexps();
-		$regexps['Substring'] = 'substring \\( ((?&String)) , ((?&Number)) (?:, ((?&Number)))? \\)';
+		$regexps['Substring'] = 'substring \\( ((?&String)) , ((?&Math)|(?&Number)) (?:, ((?&Math)|(?&Number)))? \\)';
 
 		return $regexps;
 	}
