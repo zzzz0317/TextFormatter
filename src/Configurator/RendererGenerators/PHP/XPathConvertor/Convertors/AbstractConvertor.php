@@ -52,7 +52,7 @@ abstract class AbstractConvertor
 	*/
 	protected function convert($expr)
 	{
-		$this->runner->convert($expr);
+		return $this->runner->convert($expr);
 	}
 
 	/**

@@ -45,6 +45,7 @@ class SingleByteStringFunctions extends AbstractConvertor
 
 	public function convertContains($haystack, $needle)
 	{
+print_r(func_get_args());
 		return '(strpos(' . $this->convert($haystack) . ',' . $this->convert($needle) . ')!==false)';
 	}
 

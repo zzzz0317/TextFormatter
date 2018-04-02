@@ -7,12 +7,14 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
+use RuntimeException;
+
 class Runner
 {
 	/**
-	* @var AbstractConvertor[]
+	* @var array
 	*/
-	protected $convertors;
+	protected $callbacks;
 
 	/**
 	* @var string
@@ -22,13 +24,22 @@ class Runner
 	/**
 	* 
 	*
-	* @return void
+	* @return string
 	*/
-	public function setConvertors(array $convertors)
+	public function convert($expr)
 	{
-		$this->convertors = $convertors;
+		if (preg_match($this->regexp, $expr, $m))
+		{
+			foreach (array_reverse(array_keys($m)) as $name)
+			{
+				if (isset($this->callbacks[$name]))
+				{
+					return call_user_func_array($this->callbacks[$name], $this->getArguments($m, $name));
+				}
+			}
+		}
 
-		$this->buildRegexp();
+		throw new RuntimeException('Cannot convert ' . $expr);
 	}
 
 	/**
@@ -36,24 +47,56 @@ class Runner
 	*
 	* @return void
 	*/
-	protected function buildRegexp()
+	public function setConvertors(array $convertors)
 	{
-		$exprs = [];
-		foreach ($this->convertors as $convertor)
+		$this->callbacks = [];
+		$groups          = [];
+		$regexps         = [];
+		foreach ($convertors as $convertor)
 		{
-			$exprs += $convertor->getRegexps();
+			foreach ($convertor->getRegexpGroups() as $name => $group)
+			{
+				$groups[$group][] = '(?&' . $name . ')';
+			}
+
+			foreach ($convertor->getRegexps() as $name => $regexp)
+			{
+				$regexp = $this->insertCaptureNames($name, $regexp);
+				$regexp = str_replace(' ', '\\s*', $regexp);
+				$regexp = '(?<' . $name . '>' . $regexp . ')';
+
+				$regexps[$name]         = $regexp;
+				$this->callbacks[$name] = [$convertor, 'convert' . $name];
+			}
 		}
 
-		foreach ($exprs as $name => $expr)
+		foreach ($groups as $group => $captures)
 		{
-			$expr = $this->insertCaptureNames($name, $expr);
-			$expr = str_replace(' ', '\\s*', $expr);
-			$expr = '(?<' . $name . '>' . $expr . ')';
-
-			$exprs[$name] = $expr;
+			sort($captures);
+			$regexps[] = '(?<' . $group . '>' . implode('|', $captures) . ')';
 		}
 
-		print_r($exprs);
+		$this->regexp = '(^(?:' . implode('|', $regexps) . ')$)';
+	}
+
+	/**
+	* 
+	*
+	* @param  array    $matches
+	* @param  string   $name
+	* @return string[]
+	*/
+	protected function getArguments(array $matches, $name)
+	{
+		$args = [];
+		$i    = 0;
+		while (isset($matches[$name . $i]))
+		{
+			$args[] = $matches[$name . $i];
+			++$i;
+		}
+
+		return $args;
 	}
 
 	/**
@@ -65,22 +108,12 @@ class Runner
 	{
 		$i = 0;
 		return preg_replace_callback(
-			'((?<!\\\\)\\((?![&:]))',
+			'((?<!\\\\)\\((?!\\?))',
 			function ($m) use (&$i, $name)
 			{
 				return '(?<' . $name . $i++ . '>';
 			},
 			$regexp
 		);
-	}
-
-	/**
-	* 
-	*
-	* @return void
-	*/
-	public function convert($expr)
-	{
-
 	}
 }
