@@ -17,7 +17,7 @@ class MultiByteStringFunctions extends SingleByteStringFunctions
 		$groups              = parent::getRegexpGroups();
 		$groups['Substring'] = 'String';
 
-		return $groups += ;
+		return $groups;
 	}
 
 	/**

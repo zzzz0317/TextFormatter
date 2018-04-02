@@ -30,4 +30,39 @@ class BooleanOperators extends AbstractConvertor
 			'Or'         => '((?&Boolean)|(?&Comparison)) or ((?&And)|(?&Boolean)|(?&Comparison)|(?&Or))'
 		];
 	}
+
+	/**
+	* Convert a "and" operation
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertAnd($expr1, $expr2)
+	{
+		return $this->convert($expr1) . '&&' . $this->convert($expr2);
+	}
+
+	/**
+	* Convert a boolean subexpression
+	*
+	* @param  string $expr
+	* @return string
+	*/
+	public function convertBooleanSub($expr)
+	{
+		return '(' . $this->convert($expr) . ')';
+	}
+
+	/**
+	* Convert a "or" operation
+	*
+	* @param  string $expr1
+	* @param  string $expr2
+	* @return string
+	*/
+	public function convertOr($expr1, $expr2)
+	{
+		return $this->convert($expr1) . '||' . $this->convert($expr2);
+	}
 }

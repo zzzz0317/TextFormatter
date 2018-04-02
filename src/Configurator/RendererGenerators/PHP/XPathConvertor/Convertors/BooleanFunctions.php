@@ -30,12 +30,12 @@ class BooleanFunctions extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'BooleanParam'  => 'boolean \\( (?&Parameter) \\)',
-			'HasAttribute'  => 'boolean \\( (?&Attribute) \\)',
+			'BooleanParam'  => 'boolean \\( ((?&Parameter)) \\)',
+			'HasAttribute'  => 'boolean \\( ((?&Attribute)) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
 			'Not'           => 'not \\( ((?&Boolean)|(?&Comparison)) \\)',
-			'NotAttribute'  => 'not \\( (?&Attribute) \\)',
-			'NotParam'      => 'not \\( (?&Parameter) \\)'
+			'NotAttribute'  => 'not \\( ((?&Attribute)) \\)',
+			'NotParam'      => 'not \\( ((?&Parameter)) \\)'
 		];
 	}
 
