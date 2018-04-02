@@ -17,6 +17,7 @@ class Core extends AbstractConvertor
 		return [
 			'Attribute'     => 'String',
 			'Dot'           => 'String',
+			'LiteralNumber' => 'Number',
 			'LiteralString' => 'String',
 			'LocalName'     => 'String',
 			'Name'          => 'String',
