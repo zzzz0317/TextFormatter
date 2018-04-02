@@ -15,6 +15,11 @@ class Runner
 	protected $convertors;
 
 	/**
+	* @var string
+	*/
+	protected $regexp = '((?!))';
+
+	/**
 	* 
 	*
 	* @return void
