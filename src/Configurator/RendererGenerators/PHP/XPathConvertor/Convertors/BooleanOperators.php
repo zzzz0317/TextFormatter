@@ -5,7 +5,7 @@
 * @copyright Copyright (c) 2010-2018 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
-namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
+namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors;
 
 class BooleanOperators extends AbstractConvertor
 {
@@ -15,8 +15,7 @@ class BooleanOperators extends AbstractConvertor
 	public function getRegexpGroups()
 	{
 		return [
-			'And' => 'Boolean',
-			'Or'  => 'Boolean'
+			'BooleanSub' => 'Boolean'
 		];
 	}
 
@@ -26,8 +25,9 @@ class BooleanOperators extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'And' => '((?&Boolean)|(?&Comparison)) and ((?&Boolean)|(?&Comparison))',
-			'Or'  => '((?&Boolean)|(?&Comparison)) or ((?&Boolean)|(?&Comparison))'
+			'And'        => '((?&Boolean)|(?&Comparison)) and ((?&And)|(?&Boolean)|(?&Comparison)|(?&Or))',
+			'BooleanSub' => '\\( ((?&And)|(?&Boolean)|(?&Comparison)|(?&Or)) \\)',
+			'Or'         => '((?&Boolean)|(?&Comparison)) or ((?&And)|(?&Boolean)|(?&Comparison)|(?&Or))'
 		];
 	}
 }

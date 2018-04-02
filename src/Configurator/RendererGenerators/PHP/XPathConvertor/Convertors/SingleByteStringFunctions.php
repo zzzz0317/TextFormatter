@@ -5,7 +5,7 @@
 * @copyright Copyright (c) 2010-2018 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
-namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
+namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors;
 
 class SingleByteStringFunctions extends AbstractConvertor
 {

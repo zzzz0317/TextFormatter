@@ -5,23 +5,26 @@
 * @copyright Copyright (c) 2010-2018 The s9e Authors
 * @license   http://www.opensource.org/licenses/mit-license.php The MIT License
 */
-namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
+namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors;
 
-use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Runner;
 
 abstract class AbstractConvertor
 {
 	/**
-	* @var XPathConvertor
+	* @var Runner
 	*/
-	protected $convertor;
+	protected $runner;
 
 	/**
 	* Constructor
+	*
+	* @param  Runner $runner
+	* @return void
 	*/
-	public function __construct(XPathConvertor $convertor)
+	public function __construct(Runner $runner)
 	{
-		$this->convertor = $convertor;
+		$this->runner = $runner;
 	}
 
 	/**
@@ -49,7 +52,7 @@ abstract class AbstractConvertor
 	*/
 	protected function convert($expr)
 	{
-		$this->convertor->convertXPath($expr);
+		$this->runner->convert($expr);
 	}
 
 	/**
