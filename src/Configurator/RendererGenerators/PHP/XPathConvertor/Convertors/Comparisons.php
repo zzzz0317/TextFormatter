@@ -15,13 +15,11 @@ class Comparisons extends AbstractConvertor
 	public function getRegexpGroups()
 	{
 		return [
-			'Equality'             => 'Comparison',
-			'GreaterThan'          => 'Comparison',
-			'GreaterThanOrEqualTo' => 'Comparison',
-			'LessThan'             => 'Comparison',
-			'LessThanOrEqualTo'    => 'Comparison',
-			'NonEquality'          => 'Comparison',
-			'Not'                  => 'Boolean'
+			'Eq'  => 'Comparison',
+			'Gt'  => 'Comparison',
+			'Gte' => 'Comparison',
+			'Lt'  => 'Comparison',
+			'Lte' => 'Comparison'
 		];
 	}
 
@@ -31,12 +29,11 @@ class Comparisons extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Equality'             => '((?&Math)|(?&Number)|(?&String)) = ((?&Math)|(?&Number)|(?&String))',
-			'GreaterThan'          => '((?&Math)|(?&Number)|(?&String)) > (\\d+)',
-			'GreaterThanOrEqualTo' => '((?&Math)|(?&Number)|(?&String)) >= (0*[1-9]\\d*)',
-			'LessThan'             => '(\\d+) < ((?&Math)|(?&Number)|(?&String))',
-			'LessThanOrEqualTo'    => '(0*[1-9]\\d*) <= ((?&Math)|(?&Number)|(?&String))',
-			'NonEquality'          => '((?&Math)|(?&Number)|(?&String)) != ((?&Math)|(?&Number)|(?&String))'
+			'Eq'  => '((?&Math)|(?&Number)|(?&String)) (!?=) ((?&Math)|(?&Number)|(?&String))',
+			'Gt'  => '((?&Math)|(?&Number)|(?&String)) > (\\d+)',
+			'Gte' => '((?&Math)|(?&Number)|(?&String)) >= (0*[1-9]\\d*)',
+			'Lt'  => '(\\d+) < ((?&Math)|(?&Number)|(?&String))',
+			'Lte' => '(0*[1-9]\\d*) <= ((?&Math)|(?&Number)|(?&String))'
 		];
 	}
 
@@ -44,14 +41,22 @@ class Comparisons extends AbstractConvertor
 	* Convert an equality test
 	*
 	* @param  string $expr1
+	* @param  string $operator
 	* @param  string $expr2
 	* @return string
 	*/
-	public function convertEquality($expr1, $expr2)
+	public function convertEq($expr1, $operator, $expr2)
 	{
-		$operator = ($this->isNumber($expr1) && $this->isNumber($expr2)) ? '===' : '==';
+		if (is_numeric($expr1))
+		{
+			$expr1 = "'" . $expr1 . "'";
+		}
+		if (is_numeric($expr2))
+		{
+			$expr2 = "'" . $expr2 . "'";
+		}
 
-		return $this->convertComparison($expr1, $operator, $expr2);
+		return $this->convertComparison($expr1, $operator . '=', $expr2);
 	}
 
 	/**
@@ -61,7 +66,7 @@ class Comparisons extends AbstractConvertor
 	* @param  string $expr2
 	* @return string
 	*/
-	public function convertGreaterThan($expr1, $expr2)
+	public function convertGt($expr1, $expr2)
 	{
 		return $this->convertComparison($expr1, '>', $expr2);
 	}
@@ -73,7 +78,7 @@ class Comparisons extends AbstractConvertor
 	* @param  string $expr2
 	* @return string
 	*/
-	public function convertGreaterThanOrEqualTo($expr1, $expr2)
+	public function convertGte($expr1, $expr2)
 	{
 		return $this->convertComparison($expr1, '>=', $expr2);
 	}
@@ -85,7 +90,7 @@ class Comparisons extends AbstractConvertor
 	* @param  string $expr2
 	* @return string
 	*/
-	public function convertLessThan($expr1, $expr2)
+	public function convertLt($expr1, $expr2)
 	{
 		return $this->convertComparison($expr1, '<', $expr2);
 	}
@@ -97,23 +102,9 @@ class Comparisons extends AbstractConvertor
 	* @param  string $expr2
 	* @return string
 	*/
-	public function convertLessThanOrEqualTo($expr1, $expr2)
+	public function convertLte($expr1, $expr2)
 	{
 		return $this->convertComparison($expr1, '<=', $expr2);
-	}
-
-	/**
-	* Convert a non-equality test
-	*
-	* @param  string $expr1
-	* @param  string $expr2
-	* @return string
-	*/
-	public function convertNonEquality($expr1, $expr2)
-	{
-		$operator = ($this->isNumber($expr1) && $this->isNumber($expr2)) ? '!==' : '!=';
-
-		return $this->convertComparison($expr1, $operator, $expr2);
 	}
 
 	/**
