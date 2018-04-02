@@ -31,12 +31,12 @@ class Comparisons extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Equality'             => '((?&Number)|(?&String)) = ((?&Number)|(?&String))',
-			'GreaterThan'          => '((?&Number)|(?&String)) > (\\d+)',
-			'GreaterThanOrEqualTo' => '((?&Number)|(?&String)) >= (0*[1-9]\\d*)',
-			'LessThan'             => '(\\d+) < ((?&Number)|(?&String))',
-			'LessThanOrEqualTo'    => '(0*[1-9]\\d*) <= ((?&Number)|(?&String))',
-			'NonEquality'          => '((?&Number)|(?&String)) != ((?&Number)|(?&String))'
+			'Equality'             => '((?&Math)|(?&Number)|(?&String)) = ((?&Math)|(?&Number)|(?&String))',
+			'GreaterThan'          => '((?&Math)|(?&Number)|(?&String)) > (\\d+)',
+			'GreaterThanOrEqualTo' => '((?&Math)|(?&Number)|(?&String)) >= (0*[1-9]\\d*)',
+			'LessThan'             => '(\\d+) < ((?&Math)|(?&Number)|(?&String))',
+			'LessThanOrEqualTo'    => '(0*[1-9]\\d*) <= ((?&Math)|(?&Number)|(?&String))',
+			'NonEquality'          => '((?&Math)|(?&Number)|(?&String)) != ((?&Math)|(?&Number)|(?&String))'
 		];
 	}
 

@@ -15,11 +15,11 @@ class Math extends AbstractConvertor
 	public function getRegexpGroups()
 	{
 		return [
-			'Addition'          => 'Number',
-			'Division'          => 'Number',
-			'Multiplication'    => 'Number',
-			'Substraction'      => 'Number',
-			'ParenthesizedMath' => 'Number'
+			'Addition'       => 'Math',
+			'Division'       => 'Math',
+			'MathSub'        => 'Math',
+			'Multiplication' => 'Math',
+			'Substraction'   => 'Math'
 		];
 	}
 
@@ -28,14 +28,15 @@ class Math extends AbstractConvertor
 	*/
 	public function getRegexps()
 	{
-		$numberish = '((?&Attribute)|(?&Number)|(?&Parameter))';
+		$number = '((?&Attribute)|(?&Number)|(?&Parameter))';
+		$math   = '((?&Attribute)|(?&Math)|(?&Number)|(?&Parameter))';
 
 		return [
-			'Addition'          => $numberish . ' \\+ ' . $numberish,
-			'Division'          => $numberish . ' - ' . $numberish,
-			'Multiplication'    => $numberish . ' \\* ' . $numberish,
-			'Substraction'      => $numberish . ' div ' . $numberish,
-			'ParenthesizedMath' => '\\( ((?&Number)) \\)'
+			'Addition'       => $number . ' \\+ ' . $math,
+			'Division'       => $number . ' - ' . $math,
+			'MathSub'        => '\\( ((?&Number)) \\)',
+			'Multiplication' => $number . ' \\* ' . $math,
+			'Substraction'   => $number . ' div ' . $math
 		];
 	}
 
@@ -61,6 +62,17 @@ class Math extends AbstractConvertor
 	public function convertDivision($expr1, $expr2)
 	{
 		return $this->convertOperation($expr1, '/', $expr2);
+	}
+
+	/**
+	* Convert a math subexpression
+	*
+	* @param  string $expr
+	* @return string
+	*/
+	public function convertMathSub($expr)
+	{
+		return '(' . $this->convert($expr) . ')';
 	}
 
 	/**
