@@ -8,6 +8,7 @@
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
 use RuntimeException;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\AbstractConvertor;
 
 class Runner
 {
@@ -17,9 +18,19 @@ class Runner
 	protected $callbacks;
 
 	/**
+	* @var array
+	*/
+	protected $groups;
+
+	/**
 	* @var string
 	*/
 	protected $regexp = '((?!))';
+
+	/**
+	* @var array
+	*/
+	protected $regexps;
 
 	/**
 	* 
@@ -50,33 +61,44 @@ class Runner
 	public function setConvertors(array $convertors)
 	{
 		$this->callbacks = [];
-		$groups          = [];
-		$regexps         = [];
+		$this->groups    = [];
+		$this->regexps   = [];
 		foreach ($convertors as $convertor)
 		{
-			foreach ($convertor->getRegexpGroups() as $name => $group)
-			{
-				$groups[$group][] = '(?&' . $name . ')';
-			}
-
-			foreach ($convertor->getRegexps() as $name => $regexp)
-			{
-				$regexp = $this->insertCaptureNames($name, $regexp);
-				$regexp = str_replace(' ', '\\s*', $regexp);
-				$regexp = '(?<' . $name . '>' . $regexp . ')';
-
-				$regexps[$name]         = $regexp;
-				$this->callbacks[$name] = [$convertor, 'convert' . $name];
-			}
+			$this->addConvertor($convertor);
 		}
 
-		foreach ($groups as $group => $captures)
+		foreach ($this->groups as $group => $captures)
 		{
 			sort($captures);
-			$regexps[] = '(?<' . $group . '>' . implode('|', $captures) . ')';
+			$this->regexps[] = '(?<' . $group . '>' . implode('|', $captures) . ')';
 		}
 
-		$this->regexp = '(^(?:' . implode('|', $regexps) . ')$)';
+		$this->regexp = '(^(?:' . implode('|', $this->regexps) . ')$)';
+	}
+
+	/**
+	* 
+	*
+	* @param  AbstractConvertor $convertor
+	* @return void
+	*/
+	protected function addConvertor(AbstractConvertor $convertor)
+	{
+		foreach ($convertor->getRegexpGroups() as $name => $group)
+		{
+			$this->groups[$group][] = '(?&' . $name . ')';
+		}
+
+		foreach ($convertor->getRegexps() as $name => $regexp)
+		{
+			$regexp = $this->insertCaptureNames($name, $regexp);
+			$regexp = str_replace(' ', '\\s*', $regexp);
+			$regexp = '(?<' . $name . '>' . $regexp . ')';
+
+			$this->callbacks[$name] = [$convertor, 'convert' . $name];
+			$this->regexps[$name]   = $regexp;
+		}
 	}
 
 	/**
