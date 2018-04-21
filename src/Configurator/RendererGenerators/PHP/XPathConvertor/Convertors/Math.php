@@ -28,7 +28,7 @@ class Math extends AbstractConvertor
 	*/
 	public function getRegexps()
 	{
-		$number = '((?&Attribute)|(?&Number)|(?&Parameter))';
+		$number = '((?&Attribute)|(?&MathSub)|(?&Number)|(?&Parameter))';
 		$math   = '((?&Math)|' . substr($number, 1);
 
 		return [

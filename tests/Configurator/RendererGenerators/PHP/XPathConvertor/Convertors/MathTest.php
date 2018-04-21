@@ -69,6 +69,10 @@ class MathTest extends AbstractConvertorTest
 				'@h * 3600 + @m * 60 + @s',
 				"\$node->getAttribute('h')*3600+\$node->getAttribute('m')*60+\$node->getAttribute('s')"
 			],
+			[
+				'100 * (@height + 49) div @width',
+				"100*(\$node->getAttribute('height')+49)/\$node->getAttribute('width')"
+			],
 		];
 	}
 }
