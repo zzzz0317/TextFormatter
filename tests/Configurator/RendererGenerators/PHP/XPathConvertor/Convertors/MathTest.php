@@ -60,6 +60,15 @@ class MathTest extends AbstractConvertorTest
 				'1 - -1',
 				'1- -1'
 			],
+			// Math group
+			[
+				'@m * 60 + @s',
+				"\$node->getAttribute('m')*60+\$node->getAttribute('s')"
+			],
+			[
+				'@h * 3600 + @m * 60 + @s',
+				"\$node->getAttribute('h')*3600+\$node->getAttribute('m')*60+\$node->getAttribute('s')"
+			],
 		];
 	}
 }

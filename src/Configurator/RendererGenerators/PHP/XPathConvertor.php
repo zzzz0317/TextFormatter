@@ -7,32 +7,28 @@
 */
 namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP;
 
-use LogicException;
 use RuntimeException;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Runner;
 
 class XPathConvertor
 {
 	/**
-	* @var string PCRE version
+	* @var Runner
 	*/
-	public $pcreVersion;
-
-	/**
-	* @var string Regexp used to match XPath expressions
-	*/
-	protected $regexp;
-
-	/**
-	* @var bool Whether to use the mbstring functions as a replacement for XPath expressions
-	*/
-	public $useMultibyteStringFunctions = false;
+	protected $runner;
 
 	/**
 	* Constructor
 	*/
-	public function __construct()
+	public function __construct(Runner $runner = null)
 	{
-		$this->pcreVersion = PCRE_VERSION;
+		if (!isset($runner))
+		{
+			$runner = new Runner;
+			$runner->setDefaultConvertors();
+		}
+
+		$this->runner = $runner;
 	}
 
 	/**
@@ -57,16 +53,12 @@ class XPathConvertor
 
 		// If the condition does not seem to contain a relational expression, or start with a
 		// function call, we wrap it inside of a boolean() call
-		if (!preg_match('#[=<>]|\\bor\\b|\\band\\b|^[-\\w]+\\s*\\(#', $expr))
+		if (!preg_match('([=<>]|\\bor\\b|\\band\\b|^[-\\w]+\\s*\\()', $expr))
 		{
-			// XSL: <xsl:if test="parent::foo">
-			// PHP: if ($this->xpath->evaluate("boolean(parent::foo)",$node))
 			$expr = 'boolean(' . $expr . ')';
 		}
 
-		// XSL: <xsl:if test="@foo='bar'">
-		// PHP: if ($this->xpath->evaluate("@foo='bar'",$node))
-		return $this->convertXPath($expr);
+		return $this->runner->convert($expr);
 	}
 
 	/**
@@ -78,59 +70,17 @@ class XPathConvertor
 	public function convertXPath($expr)
 	{
 		$expr = trim($expr);
-
-		$this->generateXPathRegexp();
-		if (preg_match($this->regexp, $expr, $m))
+		try
 		{
-			$methodName = null;
-			foreach ($m as $k => $v)
-			{
-				if (is_numeric($k) || $v === '' || $v === null || !method_exists($this, $k))
-				{
-					continue;
-				}
-
-				$methodName = $k;
-				break;
-			}
-
-			if (isset($methodName))
-			{
-				// Default argument is the whole matched string
-				$args = [$m[$methodName]];
-
-				// Overwrite the default arguments with the named captures
-				$i = 0;
-				while (isset($m[$methodName . $i]))
-				{
-					$args[$i] = $m[$methodName . $i];
-					++$i;
-				}
-
-				return call_user_func_array([$this, $methodName], $args);
-			}
+			return $this->runner->convert($expr);
 		}
-
-		// If the condition does not seem to contain a relational expression, or start with a
-		// function call, we wrap it inside of a string() call
-		if (!preg_match('#[=<>]|\\bor\\b|\\band\\b|^[-\\w]+\\s*\\(#', $expr))
+		catch (RuntimeException $e)
 		{
-			$expr = 'string(' . $expr . ')';
+			// Do nothing
 		}
 
 		// Replace parameters in the expression
 		return '$this->xpath->evaluate(' . $this->exportXPath($expr) . ',$node)';
-	}
-
-	protected function not($expr)
-	{
-		return '!(' . $this->convertCondition($expr) . ')';
-	}
-
-
-	protected function parens($expr)
-	{
-		return '(' . $this->convertXPath($expr) . ')';
 	}
 
 	/**
@@ -186,140 +136,6 @@ class XPathConvertor
 		$paramName = ltrim($param, '$');
 
 		return '$this->getParamAsXPath(' . var_export($paramName, true) . ')';
-	}
-
-	/**
-	* Generate a regexp used to parse XPath expressions
-	*
-	* @return void
-	*/
-	protected function generateXPathRegexp()
-	{
-		if (isset($this->regexp))
-		{
-			return;
-		}
-
-		$patterns = [
-			'attr'      => ['@', '(?<attr0>[-\\w]+)'],
-			'dot'       => '\\.',
-			'name'      => 'name\\(\\)',
-			'lname'     => 'local-name\\(\\)',
-			'param'     => ['\\$', '(?<param0>\\w+)'],
-			'string'    => '"[^"]*"|\'[^\']*\'',
-			'number'    => ['(?<number0>-?)', '(?<number1>\\d++)'],
-			'strlen'    => ['string-length', '\\(', '(?<strlen0>(?&value)?)', '\\)'],
-			'contains'  => [
-				'contains',
-				'\\(',
-				'(?<contains0>(?&value))',
-				',',
-				'(?<contains1>(?&value))',
-				'\\)'
-			],
-			'translate' => [
-				'translate',
-				'\\(',
-				'(?<translate0>(?&value))',
-				',',
-				'(?<translate1>(?&string))',
-				',',
-				'(?<translate2>(?&string))',
-				'\\)'
-			],
-			'substr' => [
-				'substring',
-				'\\(',
-				'(?<substr0>(?&value))',
-				',',
-				'(?<substr1>(?&value))',
-				'(?:, (?<substr2>(?&value)))?',
-				'\\)'
-			],
-			'substringafter' => [
-				'substring-after',
-				'\\(',
-				'(?<substringafter0>(?&value))',
-				',',
-				'(?<substringafter1>(?&string))',
-				'\\)'
-			],
-			'substringbefore' => [
-				'substring-before',
-				'\\(',
-				'(?<substringbefore0>(?&value))',
-				',',
-				'(?<substringbefore1>(?&value))',
-				'\\)'
-			],
-			'startswith' => [
-				'starts-with',
-				'\\(',
-				'(?<startswith0>(?&value))',
-				',',
-				'(?<startswith1>(?&value))',
-				'\\)'
-			],
-			'math' => [
-				'(?<math0>(?&attr)|(?&number)|(?&param))',
-				'(?<math1>[-+*]|div)',
-				'(?<math2>(?&math)|(?&math0))'
-			],
-			'notcontains' => [
-				'not',
-				'\\(',
-				'contains',
-				'\\(',
-				'(?<notcontains0>(?&value))',
-				',',
-				'(?<notcontains1>(?&value))',
-				'\\)',
-				'\\)'
-			]
-		];
-
-		$exprs = [];
-		if (version_compare($this->pcreVersion, '8.13', '>='))
-		{
-
-			// Create a regexp that matches a parenthesized expression
-			// NOTE: could be expanded to support any expression
-			$exprs[] = '(?<parens>\\( (?<parens0>(?&bool)|(?&cmp)|(?&math)) \\))';
-
-			// Create a regexp that matches boolean operations
-			$exprs[] = '(?<bool>(?<bool0>(?&cmp)|(?&not)|(?&value)|(?&parens)) (?<bool1>and|or) (?<bool2>(?&bool)|(?&cmp)|(?&not)|(?&value)|(?&parens)))';
-
-			// Create a regexp that matches not() expressions
-			$exprs[] = '(?<not>not \\( (?<not0>(?&bool)|(?&value)) \\))';
-
-			// Modify the math pattern to accept parenthesized expressions
-			$patterns['math'][0] = str_replace('))', ')|(?&parens))', $patterns['math'][0]);
-			$patterns['math'][1] = str_replace('))', ')|(?&parens))', $patterns['math'][1]);
-		}
-
-		// Create a regexp that matches values, such as "@foo" or "42"
-		$valueExprs = [];
-		foreach ($patterns as $name => $pattern)
-		{
-			if (is_array($pattern))
-			{
-				$pattern = implode(' ', $pattern);
-			}
-
-			if (strpos($pattern, '?&') === false || version_compare($this->pcreVersion, '8.13', '>='))
-			{
-				$valueExprs[] = '(?<' . $name . '>' . $pattern . ')';
-			}
-		}
-		array_unshift($exprs, '(?<value>' . implode('|', $valueExprs) . ')');
-
-		// Assemble the final regexp
-		$regexp = '#^(?:' . implode('|', $exprs) . ')$#S';
-
-		// Replace spaces with any amount of whitespace
-		$regexp = str_replace(' ', '\\s*', $regexp);
-
-		$this->regexp = $regexp;
 	}
 
 	/**

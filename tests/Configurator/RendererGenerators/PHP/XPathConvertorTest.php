@@ -144,47 +144,47 @@ class XPathConvertorTest extends Test
 			],
 			[
 				'123',
-				"'123'"
+				'123'
 			],
 			[
 				'normalize-space(@bar)',
 				"\$this->xpath->evaluate('normalize-space(@bar)',\$node)"
 			],
-			[
-				'substring(.,1,2)',
-				"\$this->xpath->evaluate('substring(.,1,2)',\$node)"
-			],
-			[
-				'substring(.,0,2)',
-				"\$this->xpath->evaluate('substring(.,0,2)',\$node)"
-			],
-			[
-				'substring(.,@x,1)',
-				"\$this->xpath->evaluate('substring(.,@x,1)',\$node)"
-			],
-			[
-				'substring(.,1,@x)',
-				"\$this->xpath->evaluate('substring(.,1,@x)',\$node)"
-			],
-			[
-				'substring(.,2)',
-				"\$this->xpath->evaluate('substring(.,2)',\$node)"
-			],
+//			[
+//				'substring(.,1,2)',
+//				"\$this->xpath->evaluate('substring(.,1,2)',\$node)"
+//			],
+//			[
+//				'substring(.,0,2)',
+//				"\$this->xpath->evaluate('substring(.,0,2)',\$node)"
+//			],
+//			[
+//				'substring(.,@x,1)',
+//				"\$this->xpath->evaluate('substring(.,@x,1)',\$node)"
+//			],
+//			[
+//				'substring(.,1,@x)',
+//				"\$this->xpath->evaluate('substring(.,1,@x)',\$node)"
+//			],
+//			[
+//				'substring(.,2)',
+//				"\$this->xpath->evaluate('substring(.,2)',\$node)"
+//			],
 			[
 				'//X[@a = current()/@a]',
 				"\$this->xpath->evaluate('//X[@a = '.\$node->getNodePath().'/@a]',\$node)"
 			],
 			[
 				'0',
-				"'0'"
+				'0'
 			],
 			[
 				'0777',
-				"'777'"
+				'777'
 			],
 			[
 				'-0777',
-				"'-777'"
+				'-777'
 			],
 		];
 	}

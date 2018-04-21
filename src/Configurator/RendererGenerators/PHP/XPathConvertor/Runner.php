@@ -106,7 +106,7 @@ class Runner
 		foreach ($this->groups as $group => $captures)
 		{
 			sort($captures);
-			$this->regexps[] = '(?<' . $group . '>' . implode('|', $captures) . ')';
+			$this->regexps[$group] = '(?<' . $group . '>' . implode('|', $captures) . ')';
 		}
 
 		$this->regexp = '(^(?:' . implode('|', $this->regexps) . ')$)';

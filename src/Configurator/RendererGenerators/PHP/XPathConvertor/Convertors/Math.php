@@ -29,7 +29,7 @@ class Math extends AbstractConvertor
 	public function getRegexps()
 	{
 		$number = '((?&Attribute)|(?&Number)|(?&Parameter))';
-		$math   = '((?&Attribute)|(?&Math)|(?&Number)|(?&Parameter))';
+		$math   = '((?&Math)|' . substr($number, 1);
 
 		return [
 			'Addition'       => $number . ' \\+ ' . $math,
