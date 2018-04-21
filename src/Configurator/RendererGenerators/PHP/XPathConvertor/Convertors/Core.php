@@ -34,7 +34,7 @@ class Core extends AbstractConvertor
 			'Attribute'     => '@ ([-\\w]+)',
 			'Dot'           => '\\.',
 			'LiteralNumber' => '(-?) (\\d++)',
-			'LiteralString' => '"[^"]*"|\'[^\']*\'',
+			'LiteralString' => '("[^"]*"|\'[^\']*\')',
 			'LocalName'     => 'local-name \\(\\)',
 			'Name'          => 'name \\(\\)',
 			'Parameter'     => '\\$(\\w+)'
