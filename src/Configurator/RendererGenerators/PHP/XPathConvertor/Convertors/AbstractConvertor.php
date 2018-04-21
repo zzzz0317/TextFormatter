@@ -67,6 +67,17 @@ abstract class AbstractConvertor
 	}
 
 	/**
+	* Retrieve the attribute name from an attribute expression
+	*
+	* @param  string $expr XPath expression for an attribute, e.g. '@foo'
+	* @return string       Attribute name, e.g. 'foo'
+	*/
+	protected function getAttributeName($expr)
+	{
+		return preg_replace('([\\s@])', '', $expr);
+	}
+
+	/**
 	* Test whether given expression is a literal number
 	*
 	* @param  string $expr

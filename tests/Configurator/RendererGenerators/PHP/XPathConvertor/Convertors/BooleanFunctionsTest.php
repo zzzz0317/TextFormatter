@@ -19,27 +19,27 @@ class BooleanFunctionsTest extends AbstractConvertorTest
 			// HasAttribute
 			[
 				'boolean(@foo)',
-				"\$node->hasAttribute('@foo')"
+				"\$node->hasAttribute('foo')"
 			],
 			// HasAttributes
 			[
 				'boolean(@*)',
-				''
+				'$node->attributes->length'
 			],
 			// Not
 			[
-				'not',
-				''
+				"not('a'='a')",
+				"!('a'=='a')"
 			],
 			// NotAttribute
 			[
-				'',
-				''
+				'not(@foo)',
+				"!\$node->hasAttribute('foo')"
 			],
 			// NotParam
 			[
-				'',
-				''
+				'not($FOO)',
+				"(\$this->params['FOO']==='')"
 			],
 		];
 	}
