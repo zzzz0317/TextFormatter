@@ -33,7 +33,7 @@ class BooleanFunctions extends AbstractConvertor
 			'BooleanParam'  => 'boolean \\( ((?&Parameter)) \\)',
 			'HasAttribute'  => 'boolean \\( ((?&Attribute)) \\)',
 			'HasAttributes' => 'boolean \\( @\\* \\)',
-			'Not'           => 'not \\( ((?&Boolean)|(?&Comparison)) \\)',
+			'Not'           => 'not \\( ((?&Boolean)|(?&Comparison)|(?&And)|(?&Or)) \\)',
 			'NotAttribute'  => 'not \\( ((?&Attribute)) \\)',
 			'NotParam'      => 'not \\( ((?&Parameter)) \\)'
 		];
