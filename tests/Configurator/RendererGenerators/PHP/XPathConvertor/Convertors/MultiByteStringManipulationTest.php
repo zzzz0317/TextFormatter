@@ -16,6 +16,10 @@ class MultiByteStringManipulationTest extends AbstractConvertorTest
 				"substring('\xC3\xB7\xC3\xB7\xC3\xB7', 2, 1)",
 				"mb_substr('\xC3\xB7\xC3\xB7\xC3\xB7',1,1,'utf-8')"
 			],
+			[
+				"substring('\xC3\xB7\xC3\xB7\xC3\xB7', 2)",
+				"mb_substr('\xC3\xB7\xC3\xB7\xC3\xB7',1,1,'utf-8')"
+			],
 		];
 	}
 }
