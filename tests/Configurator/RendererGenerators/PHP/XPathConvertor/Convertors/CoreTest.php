@@ -2,28 +2,35 @@
 
 namespace s9e\TextFormatter\Tests\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors;
 
-use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Runner;
-use s9e\TextFormatter\Tests\Test;
-
 /**
+* @covers s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\AbstractConvertor
 * @covers s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\Core
 */
-class CoreTest extends Test
+class CoreTest extends AbstractConvertorTest
 {
-	/**
-	* @dataProvider getConvertorTests
-	*/
-	public function test($original, $expected)
-	{
-		$runner = new Runner;
-		$runner->setConvertors([new \s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\Core($runner)]);
-
-		$this->assertEquals($expected, $runner->convert($original));
-	}
-
 	public function getConvertorTests()
 	{
 		return [
+			// Attribute
+			[
+				'@foo',
+				"\$node->getAttribute('foo')"
+			],
+			[
+				'@  foo',
+				"\$node->getAttribute('foo')"
+			],
+			// Dot
+			[
+				'.',
+				'$node->textContent'
+			],
+			// LiteralNumber
+			[
+				'123',
+				''
+			],
+			// LiteralString
 			[
 				"'foo'",
 				"'foo'"
