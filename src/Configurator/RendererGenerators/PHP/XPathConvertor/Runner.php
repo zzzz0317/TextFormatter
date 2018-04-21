@@ -9,6 +9,14 @@ namespace s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor;
 
 use RuntimeException;
 use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\AbstractConvertor;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\BooleanFunctions;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\BooleanOperators;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\Comparisons;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\Core;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\Math;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\MultiByteStringManipulation;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\SingleByteStringFunctions;
+use s9e\TextFormatter\Configurator\RendererGenerators\PHP\XPathConvertor\Convertors\SingleByteStringManipulation;
 
 class Runner
 {
@@ -75,6 +83,29 @@ class Runner
 		}
 
 		$this->regexp = '(^(?:' . implode('|', $this->regexps) . ')$)';
+	}
+
+	/**
+	* 
+	*
+	* @return void
+	*/
+	public function setDefaultConvertors()
+	{
+		$convertors   = [];
+		$convertors[] = new BooleanFunctions($this);
+		$convertors[] = new BooleanOperators($this);
+		$convertors[] = new Comparisons($this);
+		$convertors[] = new Core($this);
+		$convertors[] = new Math($this);
+		if (extension_loaded('mbstring'))
+		{
+			$convertors[] = new MultiByteStringManipulation($this);
+		}
+		$convertors[] = new SingleByteStringFunctions($this);
+		$convertors[] = new SingleByteStringManipulation($this);
+
+		$this->setConvertors($convertors);
 	}
 
 	/**
