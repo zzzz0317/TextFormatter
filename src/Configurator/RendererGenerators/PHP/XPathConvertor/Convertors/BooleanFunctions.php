@@ -42,12 +42,12 @@ class BooleanFunctions extends AbstractConvertor
 	/**
 	* Convert a call to boolean() with a param
 	*
-	* @param  string $paramName
+	* @param  string $param
 	* @return string
 	*/
-	public function convertBooleanParam($paramName)
+	public function convertBooleanParam($param)
 	{
-		return '($this->params[' . var_export($paramName, true) . "]!=='')";
+		return '(' . $this->convert($param) . "!=='')";
 	}
 
 	/**
