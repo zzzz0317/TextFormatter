@@ -76,6 +76,10 @@ class Runner
 			$this->addConvertor($convertor);
 		}
 
+		// Sort regexps by length to keep their order consistent
+		$this->sortRegexps();
+
+		// Add regexp groups
 		foreach ($this->groups as $group => $captures)
 		{
 			sort($captures);
@@ -167,6 +171,22 @@ class Runner
 				return '(?<' . $name . $i++ . '>';
 			},
 			$regexp
+		);
+	}
+
+	/**
+	* Sort regexps by length
+	*
+	* @return void
+	*/
+	protected function sortRegexps()
+	{
+		uasort(
+			$this->regexps,
+			function ($a, $b)
+			{
+				return strlen($b) - strlen($a);
+			}
 		);
 	}
 }
