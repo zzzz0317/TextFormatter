@@ -64,6 +64,29 @@ class Runner
 	/**
 	* 
 	*
+	* @return AbstractConvertor[]
+	*/
+	public function getDefaultConvertors()
+	{
+		$convertors   = [];
+		$convertors[] = new BooleanFunctions($this);
+		$convertors[] = new BooleanOperators($this);
+		$convertors[] = new Comparisons($this);
+		$convertors[] = new Core($this);
+		$convertors[] = new Math($this);
+		if (extension_loaded('mbstring'))
+		{
+			$convertors[] = new MultiByteStringManipulation($this);
+		}
+		$convertors[] = new SingleByteStringFunctions($this);
+		$convertors[] = new SingleByteStringManipulation($this);
+
+		return $convertors;
+	}
+
+	/**
+	* 
+	*
 	* @return void
 	*/
 	public function setConvertors(array $convertors)
@@ -96,20 +119,7 @@ class Runner
 	*/
 	public function setDefaultConvertors()
 	{
-		$convertors   = [];
-		$convertors[] = new BooleanFunctions($this);
-		$convertors[] = new BooleanOperators($this);
-		$convertors[] = new Comparisons($this);
-		$convertors[] = new Core($this);
-		$convertors[] = new Math($this);
-		if (extension_loaded('mbstring'))
-		{
-			$convertors[] = new MultiByteStringManipulation($this);
-		}
-		$convertors[] = new SingleByteStringFunctions($this);
-		$convertors[] = new SingleByteStringManipulation($this);
-
-		$this->setConvertors($convertors);
+		$this->setConvertors($this->getDefaultConvertors());
 	}
 
 	/**
