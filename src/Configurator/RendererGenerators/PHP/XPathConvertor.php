@@ -43,13 +43,22 @@ class XPathConvertor
 	public function convertCondition($expr)
 	{
 		$expr = trim($expr);
-
+echo "\nBEFORE: $expr\n";
 		// Replace @attr with boolean(@attr) in boolean expressions
 		$expr = preg_replace(
-			'((^|\\s(?:and|or)\\s*)([\\(\\s]*)([$@]\\S+)([\\)\\s]*)(?=$|\\s+(?:and|or)))',
+			'((^|\\s(?:and|or)\\s*)([\\(\\s]*)([$@][-\\w]+|@\\*)([\\)\\s]*)(?=$|\\s+(?:and|or)))',
 			'$1$2boolean($3)$4',
 			$expr
 		);
+echo "AFTER:  $expr\n";
+		try
+		{
+			return $this->runner->convert($expr);
+		}
+		catch (RuntimeException $e)
+		{
+			// Do nothing
+		}
 
 		// If the condition does not seem to contain a relational expression, or start with a
 		// function call, we wrap it inside of a boolean() call
@@ -58,7 +67,7 @@ class XPathConvertor
 			$expr = 'boolean(' . $expr . ')';
 		}
 
-		return $this->runner->convert($expr);
+		return '$this->xpath->evaluate(' . $this->exportXPath($expr) . ',$node)';
 	}
 
 	/**
