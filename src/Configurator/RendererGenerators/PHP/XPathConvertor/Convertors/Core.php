@@ -71,7 +71,7 @@ class Core extends AbstractConvertor
 	*/
 	public function convertLiteralNumber($sign, $number)
 	{
-		return "'" . $this->normalizeNumber($sign . $number) . "'";
+		return $this->normalizeNumber($sign, $number);
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Core extends AbstractConvertor
 	* @param  string $paramName
 	* @return string
 	*/
-	public function convertParam($paramName)
+	public function convertParameter($paramName)
 	{
 		return '$this->params[' . var_export($paramName, true) . ']';
 	}

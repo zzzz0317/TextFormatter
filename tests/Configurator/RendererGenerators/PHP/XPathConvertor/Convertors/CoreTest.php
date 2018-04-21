@@ -28,7 +28,19 @@ class CoreTest extends AbstractConvertorTest
 			// LiteralNumber
 			[
 				'123',
-				''
+				'123'
+			],
+			[
+				'0777',
+				'777'
+			],
+			[
+				'-123',
+				'-123'
+			],
+			[
+				'-0777',
+				'-777'
 			],
 			// LiteralString
 			[
@@ -38,6 +50,29 @@ class CoreTest extends AbstractConvertorTest
 			[
 				'"foo"',
 				"'foo'"
+			],
+			// LocalName
+			[
+				'local-name()',
+				'$node->localName'
+			],
+			[
+				'local-name ()',
+				'$node->localName'
+			],
+			// Name
+			[
+				'name()',
+				'$node->nodeName'
+			],
+			[
+				'name ()',
+				'$node->nodeName'
+			],
+			// Parameter
+			[
+				'$FOO',
+				"\$this->params['FOO']"
 			],
 		];
 	}
