@@ -35,6 +35,11 @@ abstract class AbstractConvertorTest extends Test
 			new SingleByteStringManipulation($runner)
 		]);
 
+		if ($expected === false)
+		{
+			$this->setExpectedException('RuntimeException', 'Cannot convert');
+		}
+
 		$this->assertEquals($expected, $runner->convert($original));
 	}
 

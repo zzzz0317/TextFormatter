@@ -47,7 +47,7 @@ class BooleanFunctions extends AbstractConvertor
 	*/
 	public function convertBooleanParam($expr)
 	{
-		return '(' . $this->convert($expr) . "!=='')";
+		return $this->convert($expr) . "!==''";
 	}
 
 	/**
@@ -105,6 +105,6 @@ class BooleanFunctions extends AbstractConvertor
 	*/
 	public function convertNotParam($expr)
 	{
-		return '(' . $this->convert($expr) . "==='')";
+		return $this->convert($expr) . "===''";
 	}
 }

@@ -47,15 +47,6 @@ class Comparisons extends AbstractConvertor
 	*/
 	public function convertEq($expr1, $operator, $expr2)
 	{
-		if (is_numeric($expr1))
-		{
-			$expr1 = "'" . $expr1 . "'";
-		}
-		if (is_numeric($expr2))
-		{
-			$expr2 = "'" . $expr2 . "'";
-		}
-
 		return $this->convertComparison($expr1, $operator . '=', $expr2);
 	}
 
@@ -117,6 +108,6 @@ class Comparisons extends AbstractConvertor
 	*/
 	protected function convertComparison($expr1, $operator, $expr2)
 	{
-		return $this->convertExpression($expr1) . $operator . $this->convertExpression($expr2);
+		return $this->convert($expr1) . $operator . $this->convert($expr2);
 	}
 }

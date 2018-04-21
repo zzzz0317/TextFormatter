@@ -56,17 +56,6 @@ abstract class AbstractConvertor
 	}
 
 	/**
-	* Convert given expression
-	*
-	* @param  string $expr
-	* @return string
-	*/
-	protected function convertExpression($expr)
-	{
-		return ($this->isNumber($expr)) ? $this->normalizeNumber($expr) : $this->convert($expr);
-	}
-
-	/**
 	* Retrieve the attribute name from an attribute expression
 	*
 	* @param  string $expr XPath expression for an attribute, e.g. '@foo'

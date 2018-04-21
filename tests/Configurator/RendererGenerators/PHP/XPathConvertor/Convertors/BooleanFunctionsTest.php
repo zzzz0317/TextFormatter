@@ -14,7 +14,7 @@ class BooleanFunctionsTest extends AbstractConvertorTest
 			// BooleanParam
 			[
 				'boolean($FOO)',
-				"(\$this->params['FOO']!=='')"
+				"\$this->params['FOO']!==''"
 			],
 			// HasAttribute
 			[
@@ -39,7 +39,7 @@ class BooleanFunctionsTest extends AbstractConvertorTest
 			// NotParam
 			[
 				'not($FOO)',
-				"(\$this->params['FOO']==='')"
+				"\$this->params['FOO']===''"
 			],
 		];
 	}
