@@ -39,20 +39,20 @@ class MultiByteStringManipulation extends AbstractConvertor
 	*/
 	public function convertSubstring($exprString, $exprPos, $exprLen = PHP_INT_MAX)
 	{
+		$args = [$this->convert($exprString)];
+
 		// NOTE: negative values for the second argument do not produce the same result as
 		//       specified in XPath if the argument is not a literal number
-		$php = 'mb_substr(' . $this->convert($exprString) . ',';
 
 		// Hardcode the value if possible
 		if (is_numeric($exprPos))
 		{
-			$php .= max(0, $exprPos - 1);
+			$args[] = max(0, $exprPos - 1);
 		}
 		else
 		{
-			$php .= 'max(0,' . $this->convert($exprPos) . '-1)';
+			$args[] = 'max(0,' . $this->convert($exprPos) . '-1)';
 		}
-		$php .= ',';
 
 		if (is_numeric($exprLen))
 		{
@@ -62,14 +62,14 @@ class MultiByteStringManipulation extends AbstractConvertor
 				// Handle substring(0,2) as per XPath 1.0
 				$len += $exprPos - 1;
 			}
-			$php .= max(0, $len);
+			$args[] = max(0, $len);
 		}
 		else
 		{
-			$php .= 'max(0,' . $this->convert($exprLen) . ')';
+			$args[] = 'max(0,' . $this->convert($exprLen) . ')';
 		}
-		$php .= ",'utf-8')";
+		$args[] = "'utf-8'";
 
-		return $php;
+		return 'mb_substr(' . implode(',', $args) . ')';
 	}
 }
