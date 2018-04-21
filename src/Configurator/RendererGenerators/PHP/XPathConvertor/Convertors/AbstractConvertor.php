@@ -32,10 +32,7 @@ abstract class AbstractConvertor
 	*
 	* @return array
 	*/
-	public function getRegexpGroups()
-	{
-		return [];
-	}
+	abstract public function getRegexpGroups();
 
 	/**
 	* 
@@ -64,17 +61,6 @@ abstract class AbstractConvertor
 	protected function getAttributeName($expr)
 	{
 		return preg_replace('([\\s@])', '', $expr);
-	}
-
-	/**
-	* Test whether given expression is a literal number
-	*
-	* @param  string $expr
-	* @return bool
-	*/
-	protected function isNumber($expr)
-	{
-		return (bool) preg_match('(^-?\\s*\\d++$)', $expr);
 	}
 
 	/**
