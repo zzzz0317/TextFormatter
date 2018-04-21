@@ -33,10 +33,10 @@ class Math extends AbstractConvertor
 
 		return [
 			'Addition'       => $number . ' \\+ ' . $math,
-			'Division'       => $number . ' - ' . $math,
-			'MathSub'        => '\\( ((?&Number)) \\)',
+			'Division'       => $number . ' div ' . $math,
+			'MathSub'        => '\\( ((?&Math)) \\)',
 			'Multiplication' => $number . ' \\* ' . $math,
-			'Substraction'   => $number . ' div ' . $math
+			'Substraction'   => $number . ' - ' . $math
 		];
 	}
 
@@ -109,8 +109,8 @@ class Math extends AbstractConvertor
 	*/
 	protected function convertOperation($expr1, $operator, $expr2)
 	{
-		$expr1 = $this->convertExpression($expr1);
-		$expr2 = $this->convertExpression($expr2);
+		$expr1 = $this->convert($expr1);
+		$expr2 = $this->convert($expr2);
 
 		// Prevent two consecutive minus signs to be interpreted as a post-decrement operator
 		if ($operator === '-' && $expr2[0] === '-')
