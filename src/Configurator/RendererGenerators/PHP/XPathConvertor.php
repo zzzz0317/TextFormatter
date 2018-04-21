@@ -42,15 +42,13 @@ class XPathConvertor
 	*/
 	public function convertCondition($expr)
 	{
-		$expr = trim($expr);
-echo "\nBEFORE: $expr\n";
 		// Replace @attr with boolean(@attr) in boolean expressions
 		$expr = preg_replace(
 			'((^|\\s(?:and|or)\\s*)([\\(\\s]*)([$@][-\\w]+|@\\*)([\\)\\s]*)(?=$|\\s+(?:and|or)))',
 			'$1$2boolean($3)$4',
-			$expr
+			trim($expr)
 		);
-echo "AFTER:  $expr\n";
+
 		try
 		{
 			return $this->runner->convert($expr);

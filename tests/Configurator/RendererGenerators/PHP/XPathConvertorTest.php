@@ -362,7 +362,7 @@ class XPathConvertorTest extends Test
 			],
 			[
 				".='x'or.='y'or.='z'",
-				"\$node->textContent==='x'||\$node->textContent==='y'||\$node->textContent==='z'"
+				"\$node->textContent=='x'||\$node->textContent=='y'||\$node->textContent=='z'"
 			],
 			[
 				"@x and @y and @z and @a",
@@ -370,7 +370,7 @@ class XPathConvertorTest extends Test
 			],
 			[
 				"@type='gifv' and @width and @height and @height != 0",
-				"\$node->getAttribute('type')==='gifv'&&\$node->hasAttribute('width')&&\$node->hasAttribute('height')&&\$node->getAttribute('height')!=0"
+				"\$node->getAttribute('type')=='gifv'&&\$node->hasAttribute('width')&&\$node->hasAttribute('height')&&\$node->getAttribute('height')!=0"
 			],
 			[
 				"contains(@foo,'x')",
@@ -394,7 +394,7 @@ class XPathConvertorTest extends Test
 			],
 			[
 				'(@a = @b) or (@b = @c)',
-				"(\$node->getAttribute('a')===\$node->getAttribute('b'))||(\$node->getAttribute('b')===\$node->getAttribute('c'))"
+				"(\$node->getAttribute('a')==\$node->getAttribute('b'))||(\$node->getAttribute('b')==\$node->getAttribute('c'))"
 			],
 			[
 				'ancestor::foo',
@@ -405,20 +405,5 @@ class XPathConvertorTest extends Test
 				"(strpos(\$node->getAttribute('type'),'decimal-')===0)||(strpos(\$node->getAttribute('type'),'lower-')===0)||(strpos(\$node->getAttribute('type'),'upper-')===0)"
 			],
 		];
-	}
-
-	/**
-	* @testdox Covering test for convertXPath()
-	*/
-	public function testConvertXPathUnsupported()
-	{
-		$convertor = new XPathConvertor;
-		$method = new ReflectionProperty(get_class($convertor), 'regexp');
-		$method->setAccessible(true);
-		$method->setValue($convertor, '()');
-		$this->assertSame(
-			"\$this->xpath->evaluate('@foo=@bar',\$node)",
-			$convertor->convertXPath('@foo=@bar')
-		);
 	}
 }
