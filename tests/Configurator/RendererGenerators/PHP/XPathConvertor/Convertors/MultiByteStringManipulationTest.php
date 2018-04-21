@@ -13,12 +13,20 @@ class MultiByteStringManipulationTest extends AbstractConvertorTest
 		return [
 			// Substring
 			[
-				"substring('\xC3\xB7\xC3\xB7\xC3\xB7', 2, 1)",
-				"mb_substr('\xC3\xB7\xC3\xB7\xC3\xB7',1,1,'utf-8')"
+				"substring('ö÷ø', 2, 1)",
+				"mb_substr('ö÷ø',1,1,'utf-8')"
 			],
 			[
-				"substring('\xC3\xB7\xC3\xB7\xC3\xB7', 2)",
-				"mb_substr('\xC3\xB7\xC3\xB7\xC3\xB7',1,1,'utf-8')"
+				"substring('ö÷ø', 2)",
+				"mb_substr('ö÷ø',1,null,'utf-8')"
+			],
+			[
+				"substring(@foo, 1, string-length(@foo))",
+				"mb_substr(\$node->getAttribute('foo'),0,max(0,preg_match_all('(.)su',\$node->getAttribute('foo'))),'utf-8')"
+			],
+			[
+				"substring(@foo, string-length(@foo))",
+				"mb_substr(\$node->getAttribute('foo'),max(0,preg_match_all('(.)su',\$node->getAttribute('foo'))-1),null,'utf-8')"
 			],
 		];
 	}

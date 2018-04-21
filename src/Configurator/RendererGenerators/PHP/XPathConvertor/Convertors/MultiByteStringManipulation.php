@@ -25,7 +25,7 @@ class MultiByteStringManipulation extends AbstractConvertor
 	public function getRegexps()
 	{
 		return [
-			'Substring' => 'substring \\( ((?&String)) , ((?&Number)) (?:, ((?&Number)))? \\)'
+			'Substring' => 'substring \\( ((?&String)) , ((?&Math)|(?&Number)) (?:, ((?&Math)|(?&Number)))? \\)'
 		];
 	}
 
@@ -37,39 +37,46 @@ class MultiByteStringManipulation extends AbstractConvertor
 	* @param  integer|string $exprLen
 	* @return string
 	*/
-	public function convertSubstring($exprString, $exprPos, $exprLen = PHP_INT_MAX)
+	public function convertSubstring($exprString, $exprPos, $exprLen = null)
 	{
-		$args = [$this->convert($exprString)];
-
-		// NOTE: negative values for the second argument do not produce the same result as
-		//       specified in XPath if the argument is not a literal number
-
-		// Hardcode the value if possible
-		if (is_numeric($exprPos))
-		{
-			$args[] = max(0, $exprPos - 1);
-		}
-		else
-		{
-			$args[] = 'max(0,' . $this->convert($exprPos) . '-1)';
-		}
-
-		if (is_numeric($exprLen))
-		{
-			$len = $exprLen;
-			if (is_numeric($exprPos) && $exprPos < 1)
-			{
-				// Handle substring(0,2) as per XPath 1.0
-				$len += $exprPos - 1;
-			}
-			$args[] = max(0, $len);
-		}
-		else
-		{
-			$args[] = 'max(0,' . $this->convert($exprLen) . ')';
-		}
+		$args   = [];
+		$args[] = $this->convert($exprString);
+		$args[] = $this->convertPos($exprPos);
+		$args[] = (isset($exprLen)) ? $this->convertLen($exprLen) : 'null';
 		$args[] = "'utf-8'";
 
 		return 'mb_substr(' . implode(',', $args) . ')';
+	}
+
+	/**
+	* 
+	*
+	* @return void
+	*/
+	protected function convertLen($expr)
+	{
+		// NOTE: negative values for the second argument do not produce the same result as
+		//       specified in XPath if the argument is not a literal number
+		if (is_numeric($expr))
+		{
+			return max(0, $expr);
+		}
+
+		return 'max(0,' . $this->convert($expr) . ')';
+	}
+
+	/**
+	* 
+	*
+	* @return void
+	*/
+	protected function convertPos($expr)
+	{
+		if (is_numeric($expr))
+		{
+			return max(0, $expr - 1);
+		}
+
+		return 'max(0,' . $this->convert($expr) . '-1)';
 	}
 }
