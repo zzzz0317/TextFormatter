@@ -36,7 +36,7 @@ abstract class XPathHelper
 	* @param  string $expr
 	* @return string
 	*/
-	public static function decodeStrings($expr)
+	public static function encodeStrings($expr)
 	{
 		return preg_replace_callback(
 			'(([\'"])(.*?)\\1)s',
