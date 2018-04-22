@@ -408,6 +408,10 @@ class XPathConvertorTest extends Test
 				'@tld="es" and $AMAZON_ASSOCIATE_TAG_ES',
 				"\$node->getAttribute('tld')=='es'&&\$this->params['AMAZON_ASSOCIATE_TAG_ES']!==''"
 			],
+			[
+				'@tld="es"and$AMAZON_ASSOCIATE_TAG_ES',
+				"\$node->getAttribute('tld')=='es'&&\$this->params['AMAZON_ASSOCIATE_TAG_ES']!==''"
+			],
 		];
 	}
 }
