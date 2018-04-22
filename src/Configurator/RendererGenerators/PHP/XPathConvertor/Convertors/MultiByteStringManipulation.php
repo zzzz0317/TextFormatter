@@ -32,13 +32,19 @@ class MultiByteStringManipulation extends AbstractConvertor
 	/**
 	* Convert a substring() function call
 	*
-	* @param  string         $exprString
-	* @param  string         $exprPos
-	* @param  integer|string $exprLen
+	* @param  string $exprString
+	* @param  string $exprPos
+	* @param  string $exprLen
 	* @return string
 	*/
 	public function convertSubstring($exprString, $exprPos, $exprLen = null)
 	{
+		// Try to fix negative lengths when possible
+		if (is_numeric($exprPos) && is_numeric($exprLen) && $exprPos < 1)
+		{
+			$exprLen += $exprPos - 1;
+		}
+
 		$args   = [];
 		$args[] = $this->convert($exprString);
 		$args[] = $this->convertPos($exprPos);
