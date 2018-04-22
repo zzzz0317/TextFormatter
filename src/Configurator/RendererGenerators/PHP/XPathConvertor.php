@@ -93,8 +93,12 @@ class XPathConvertor
 			// Do nothing
 		}
 
-		// Replace parameters in the expression and make sure it evaluates as a string
-		$expr = $this->exportXPath('string(' . $expr . ')');
+		// Make sure the expression evaluates as a string
+		if (!preg_match('(^[-\\w]*s(?:pace|tring)\\()', $expr))
+		{
+			$expr = 'string(' . $expr . ')';
+		}
+		$expr = $this->exportXPath($expr);
 
 		return '$this->xpath->evaluate(' . $expr . ',$node)';
 	}

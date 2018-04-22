@@ -141,7 +141,7 @@ class XPathConvertorTest extends Test
 //			],
 			[
 				'//X[@a = current()/@a]',
-				"\$this->xpath->evaluate('//X[@a = '.\$node->getNodePath().'/@a]',\$node)"
+				"\$this->xpath->evaluate('string(//X[@a = '.\$node->getNodePath().'/@a])',\$node)"
 			],
 			[
 				'0',
