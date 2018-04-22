@@ -53,7 +53,6 @@ class XPathConvertorTest extends Test
 			$this->markTestSkipped('This optimization requires PCRE 8.13 or newer');
 		}
 		$convertor = new XPathConvertor;
-		$convertor->useMultibyteStringFunctions = true;
 		$this->assertSame($expected, $convertor->convertXPath($original));
 	}
 

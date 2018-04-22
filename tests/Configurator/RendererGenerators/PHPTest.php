@@ -926,36 +926,10 @@ class PHPTest extends Test
 				"if(\$node->hasAttribute('foo'))"
 			],
 			[
-				'<xsl:if test="$a+$b=$c">...</xsl:if>',
-				"if(\$this->xpath->evaluate(\$this->getParamAsXPath('a').'+'.\$this->getParamAsXPath('b').'='.\$this->getParamAsXPath('c'),\$node))"
+				'<xsl:if test="$a+$b&gt;$c">...</xsl:if>',
+				"if(\$this->xpath->evaluate(\$this->getParamAsXPath('a').'+'.\$this->getParamAsXPath('b').'>'.\$this->getParamAsXPath('c'),\$node))"
 			],
 		];
-	}
-
-	/**
-	* @requires extension mbstring
-	* @testdox useMultibyteStringFunctions is set to TRUE if mbstring is available
-	*/
-	public function testMbstringSet()
-	{
-		$generator = new PHP;
-		$this->assertTrue($generator->useMultibyteStringFunctions);
-	}
-
-	/**
-	* @testdox mbstring functions are not used if $useMultibyteStringFunctions is FALSE
-	*/
-	public function testNoMbstring()
-	{
-		$this->runCodeTest(
-			'<xsl:value-of select="string-length(@foo)"/>',
-			null,
-			'mb_strlen',
-			function ($generator)
-			{
-				$generator->useMultibyteStringFunctions = false;
-			}
-		);
 	}
 
 	/**

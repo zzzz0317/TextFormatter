@@ -21,11 +21,6 @@ class Serializer
 	public $convertor;
 
 	/**
-	* @var bool Whether to use the mbstring functions as a replacement for XPath expressions
-	*/
-	public $useMultibyteStringFunctions = false;
-
-	/**
 	* Constructor
 	*/
 	public function __construct()
@@ -72,8 +67,6 @@ class Serializer
 	*/
 	public function convertCondition($expr)
 	{
-		$this->convertor->useMultibyteStringFunctions = $this->useMultibyteStringFunctions;
-
 		return $this->convertor->convertCondition($expr);
 	}
 
@@ -85,9 +78,13 @@ class Serializer
 	*/
 	public function convertXPath($expr)
 	{
-		$this->convertor->useMultibyteStringFunctions = $this->useMultibyteStringFunctions;
+		$php = $this->convertor->convertXPath($expr);
+		if (is_numeric($php))
+		{
+			$php = "'" . $php . "'";
+		}
 
-		return $this->convertor->convertXPath($expr);
+		return $php;
 	}
 
 	/**
