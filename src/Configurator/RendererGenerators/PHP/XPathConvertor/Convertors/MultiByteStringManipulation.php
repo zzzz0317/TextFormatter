@@ -55,9 +55,10 @@ class MultiByteStringManipulation extends AbstractConvertor
 	}
 
 	/**
-	* 
+	* Convert the length expression of a substring() call
 	*
-	* @return void
+	* @param  string $expr
+	* @return string
 	*/
 	protected function convertLen($expr)
 	{
@@ -65,22 +66,23 @@ class MultiByteStringManipulation extends AbstractConvertor
 		//       specified in XPath if the argument is not a literal number
 		if (is_numeric($expr))
 		{
-			return max(0, $expr);
+			return (string) max(0, $expr);
 		}
 
 		return 'max(0,' . $this->convert($expr) . ')';
 	}
 
 	/**
-	* 
+	* Convert the position expression of a substring() call
 	*
-	* @return void
+	* @param  string $expr
+	* @return string
 	*/
 	protected function convertPos($expr)
 	{
 		if (is_numeric($expr))
 		{
-			return max(0, $expr - 1);
+			return (string) max(0, $expr - 1);
 		}
 
 		return 'max(0,' . $this->convert($expr) . '-1)';
