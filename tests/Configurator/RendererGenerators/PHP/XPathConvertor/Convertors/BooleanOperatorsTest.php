@@ -16,6 +16,10 @@ class BooleanOperatorsTest extends AbstractConvertorTest
 				'1=1 and 2=2',
 				'1==1&&2==2'
 			],
+			[
+				"@tld='es' and boolean(\$AMAZON_ASSOCIATE_TAG_ES)",
+				"\$node->getAttribute('tld')=='es'&&\$this->params['AMAZON_ASSOCIATE_TAG_ES']!==''"
+			],
 			// BooleanSub
 			[
 				'(1=0 or 1=1) and (2=2 or 1=1)',

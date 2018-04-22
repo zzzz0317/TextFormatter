@@ -404,6 +404,10 @@ class XPathConvertorTest extends Test
 				"starts-with(@type,'decimal-') or starts-with(@type,'lower-') or starts-with(@type,'upper-')",
 				"(strpos(\$node->getAttribute('type'),'decimal-')===0)||(strpos(\$node->getAttribute('type'),'lower-')===0)||(strpos(\$node->getAttribute('type'),'upper-')===0)"
 			],
+			[
+				'@tld="es" and $AMAZON_ASSOCIATE_TAG_ES',
+				"\$node->getAttribute('tld')=='es'&&\$this->params['AMAZON_ASSOCIATE_TAG_ES']!==''"
+			],
 		];
 	}
 }
