@@ -93,8 +93,10 @@ class XPathConvertor
 			// Do nothing
 		}
 
-		// Replace parameters in the expression
-		return '$this->xpath->evaluate(' . $this->exportXPath($expr) . ',$node)';
+		// Replace parameters in the expression and make sure it evaluates as a string
+		$expr = $this->exportXPath('string(' . $expr . ')');
+
+		return '$this->xpath->evaluate(' . $expr . ',$node)';
 	}
 
 	/**
