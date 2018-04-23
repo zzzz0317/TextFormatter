@@ -88,7 +88,6 @@ class Core extends AbstractConvertor
 	/**
 	* Convert a local-name() function call
 	*
-	* @param  string $attrName
 	* @return string
 	*/
 	public function convertLocalName()
@@ -99,7 +98,6 @@ class Core extends AbstractConvertor
 	/**
 	* Convert a name() function call
 	*
-	* @param  string $attrName
 	* @return string
 	*/
 	public function convertName()
